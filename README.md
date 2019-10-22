@@ -1,2 +1,2 @@
-# mSOF
-multiple Species Orthology Finder
+# ConnectOrR
+Connect Ortholog RNAs
