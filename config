@@ -1,3 +1,4 @@
-species_name	GENCODE_assembly	path	format
-Human	hg19	./gencode.v19.annotation.gtf.gz	gff
-Mouse	Mm10	./gencode.vM20.annotation.gtf.gz	gff
+specie	assembly_version	annotation	chainmap
+Human	hg38	/data/projects/p283_rna_and_disease/projects/carlos/ConnectOR.v0.01/GTFs/hg38.gtf
+Mouse	mm10	/data/projects/p283_rna_and_disease/projects/carlos/ConnectOR.v0.01/GTFs/mm10.gtf
+ZebraFish	danrer10	/data/projects/p283_rna_and_disease/projects/carlos/ConnectOR.v0.01/GTFs/danrer10.gtf
