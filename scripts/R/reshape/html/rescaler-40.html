@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Rescaler</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for rescaler {reshape}"><tr><td>rescaler {reshape}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Rescaler</h2>
+
+<h3>Description</h3>
+
+<p>Convenient methods for rescaling data
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>rescaler(x, type="sd", ...)</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>object to rescale</p>
+</td></tr>
+<tr valign="top"><td><code>type</code></td>
+<td>
+<p>type of rescaling to use (see description for details)</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>other options (only pasesed to <code><a href="../../base/html/rank.html">rank</a></code>)</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Provides methods for vectors, matrices and data.frames
+</p>
+<p>Currently, five rescaling options are implemented:
+</p>
+
+<ul>
+<li> <p><code>I</code>: do nothing
+</p>
+</li>
+<li> <p><code>range</code>: scale to [0, 1]
+</p>
+</li>
+<li> <p><code>rank</code>: convert values to ranks
+</p>
+</li>
+<li> <p><code>robust</code>: robust version of <code>sd</code>, substract median and divide by median absolute deviation
+</p>
+</li>
+<li> <p><code>sd</code>: subtract mean and divide by standard deviation
+</p>
+</li></ul>
+
+
+<h3>Author(s)</h3>
+
+<p>Hadley Wickham &lt;h.wickham@gmail.com&gt;</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="rescaler-default-bl.html">rescaler.default</a></code></p>
+
+<hr /><div style="text-align: center;">[Package <em>reshape</em> version 0.8.8 <a href="00Index.html">Index</a>]</div>
+</body></html>

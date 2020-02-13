@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Plot bootstrap summary</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for plot_bootstrap {sleuth}"><tr><td>plot_bootstrap {sleuth}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Plot bootstrap summary</h2>
+
+<h3>Description</h3>
+
+<p>Plot the normalized bootstraps across all samples.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+plot_bootstrap(obj, target_id, units = "est_counts",
+  color_by = setdiff(colnames(obj$sample_to_covariates), "sample"),
+  x_axis_angle = 50, divide_groups = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>obj</code></td>
+<td>
+<p>a sleuth object that contains a bootstrap summary (see <code><a href="get_bootstrap_summary.html">get_bootstrap_summary</a></code>)</p>
+</td></tr>
+<tr valign="top"><td><code>target_id</code></td>
+<td>
+<p>a character vector of length 1 indicating the target_id (transcript or gene name depending on aggregation mode)</p>
+</td></tr>
+<tr valign="top"><td><code>units</code></td>
+<td>
+<p>a character vector of either 'est_counts' ('scaled_reads_per_base' for gene_mode) or 'tpm'</p>
+</td></tr>
+<tr valign="top"><td><code>color_by</code></td>
+<td>
+<p>a column in the sample to covariates to color by</p>
+</td></tr>
+<tr valign="top"><td><code>x_axis_angle</code></td>
+<td>
+<p>the angle of the x-axis labels</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a ggplot2 object
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>sleuth</em> version 0.30.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

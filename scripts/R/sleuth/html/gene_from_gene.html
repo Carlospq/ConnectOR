@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Get the gene ID using other gene identifiers</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for gene_from_gene {sleuth}"><tr><td>gene_from_gene {sleuth}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Get the gene ID using other gene identifiers</h2>
+
+<h3>Description</h3>
+
+<p>Get the <code>target_id</code> of a gene using other gene identifiers.
+The identifiers found under the <code>obj$gene_column</code> are often
+difficult to remember (e.g. ensembl gene ID, ENSG00000111640).
+This function allows a user to find that difficult-to-remember
+identifier using more-easily-remembered identifiers, such as
+gene symbol (e.g. &quot;GAPDH&quot;).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+gene_from_gene(obj, gene_colname, gene_name)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>obj</code></td>
+<td>
+<p>a <code>sleuth</code> object</p>
+</td></tr>
+<tr valign="top"><td><code>gene_colname</code></td>
+<td>
+<p>the name of the column containing 'gene_name'.
+This parameter refers to the name of the column that the gene you are searching for appears in.
+Check the column names using <code>colnames(obj$target_mapping)</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>gene_name</code></td>
+<td>
+<p>a string containing the name of the gene you are interested in.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a character vector containing the <code>target_id</code> of the gene, found under
+<code>obj$gene_column</code> within <code>obj$target_mapping</code>.
+If the column name provided is the same as <code>obj$gene_column</code>, and the
+gene_name used is found, that gene_name will be returned.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+  ## Not run: gene_from_gene(obj, "gene_symbol", "GAPDH")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>sleuth</em> version 0.30.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

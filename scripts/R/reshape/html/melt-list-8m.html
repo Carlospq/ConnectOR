@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Melt a list</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for melt.list {reshape}"><tr><td>melt.list {reshape}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Melt a list</h2>
+
+<h3>Description</h3>
+
+<p>Melting a list recursively melts each component of the list and joins the results together
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>## S3 method for class 'list'
+melt(data, ..., level=1)</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>other arguments passed down</p>
+</td></tr>
+<tr valign="top"><td><code>level</code></td>
+<td>
+</td></tr>
+</table>
+
+
+<h3>Author(s)</h3>
+
+<p>Hadley Wickham &lt;h.wickham@gmail.com&gt;</p>
+
+
+<h3>Examples</h3>
+
+<pre>a &lt;- as.list(1:4)
+melt(a)
+names(a) &lt;- letters[1:4]
+melt(a)
+attr(a, "varname") &lt;- "ID"
+melt(a)
+a &lt;- list(matrix(1:4, ncol=2), matrix(1:6, ncol=2))
+melt(a)
+a &lt;- list(matrix(1:4, ncol=2), array(1:27, c(3,3,3)))
+melt(a)
+melt(list(1:5, matrix(1:4, ncol=2)))
+melt(list(list(1:3), 1, list(as.list(3:4), as.list(1:2))))</pre>
+
+<hr /><div style="text-align: center;">[Package <em>reshape</em> version 0.8.8 <a href="00Index.html">Index</a>]</div>
+</body></html>

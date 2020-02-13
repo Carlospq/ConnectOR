@@ -1,0 +1,9 @@
+prefix=/data7/projects/p283_rna_and_disease/projects/sinergia/final_results/scallop/scallop_env/
+datadir=${prefix}/share/coin/Data/Sample
+
+Name: Sample
+Description: Sample models
+URL: https://projects.coin-or.org/svn/Data/Sample
+Version: 1.2.10
+Libs:
+Cflags:

@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Cast function</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for cast {reshape}"><tr><td>cast {reshape}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Cast function</h2>
+
+<h3>Description</h3>
+
+<p>Cast a molten data frame into the reshaped or aggregated form you want
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>cast(data, formula = ... ~ variable, fun.aggregate=NULL, ...,
+  margins=FALSE, subset=TRUE, df=FALSE, fill=NULL, add.missing=FALSE,
+  value = guess_value(data))</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>molten data frame, see <code><a href="melt-24.html">melt</a></code></p>
+</td></tr>
+<tr valign="top"><td><code>formula</code></td>
+<td>
+<p>casting formula, see details for specifics</p>
+</td></tr>
+<tr valign="top"><td><code>fun.aggregate</code></td>
+<td>
+<p>aggregation function</p>
+</td></tr>
+<tr valign="top"><td><code>add.missing</code></td>
+<td>
+<p>fill in missing combinations?</p>
+</td></tr>
+<tr valign="top"><td><code>value</code></td>
+<td>
+<p>name of value column</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>further arguments are passed to aggregating function</p>
+</td></tr>
+<tr valign="top"><td><code>margins</code></td>
+<td>
+<p>vector of variable names (can include &quot;grand\_col&quot; and &quot;grand\_row&quot;) to compute margins for, or TRUE to computer all margins</p>
+</td></tr>
+<tr valign="top"><td><code>subset</code></td>
+<td>
+<p>logical vector to subset data set with before reshaping</p>
+</td></tr>
+<tr valign="top"><td><code>df</code></td>
+<td>
+<p>argument used internally</p>
+</td></tr>
+<tr valign="top"><td><code>fill</code></td>
+<td>
+<p>value with which to fill in structural missings, defaults to value from applying <code>fun.aggregate</code> to 0 length vector</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Along with <code><a href="melt-24.html">melt</a></code>  and <a href="recast-ar.html">recast</a>, this is the only function you should ever need to use.
+Once you have melted your data, cast will arrange it into the form you desire
+based on the specification given by <code>formula</code>.
+</p>
+<p>The cast formula has the following format: <code>x_variable + x_2 ~ y_variable + y_2 ~ z_variable ~  ... | list_variable + ... </code>
+The order of the variables makes a difference.  The first varies slowest, and the last
+fastest.  There are a couple of special variables: &quot;...&quot; represents all other variables
+not used in the formula and &quot;.&quot; represents no variable, so you can do <code>formula=var1 ~ .</code>
+</p>
+<p>Creating high-D arrays is simple, and allows a class of transformations that are hard
+without <code><a href="../../base/html/apply.html">apply</a></code> and <code><a href="../../base/html/sweep.html">sweep</a></code>
+</p>
+<p>If the combination of variables you supply does not uniquely identify one row in the
+original data set, you will need to supply an aggregating function, <code>fun.aggregate</code>.
+This function should take a vector of numbers and return a summary statistic(s).  It must
+return the same number of arguments regardless of the length of the input vector.
+If it returns multiple value you can use &quot;result\_variable&quot; to control where they appear.
+By default they will appear as the last column variable.
+</p>
+<p>The margins argument should be passed a vector of variable names, eg.
+<code>c("month","day")</code>.  It will silently drop any variables that can not be margined
+over.  You can also use &quot;grand\_col&quot; and &quot;grand\_row&quot; to get grand row and column margins
+respectively.
+</p>
+<p>Subset takes a logical vector that will be evaluated in the context of <code>data</code>,
+so you can do something like <code>subset = variable=="length"</code>
+</p>
+<p>All the actual reshaping is done by <code><a href="reshape-4u.html">reshape1</a></code>, see its documentation
+for details of the implementation</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Hadley Wickham &lt;h.wickham@gmail.com&gt;</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="reshape-4u.html">reshape1</a></code>,  <a href="http://had.co.nz/reshape/">http://had.co.nz/reshape/</a></p>
+
+
+<h3>Examples</h3>
+
+<pre>#Air quality example
+names(airquality) &lt;- tolower(names(airquality))
+aqm &lt;- melt(airquality, id=c("month", "day"), na.rm=TRUE)
+
+cast(aqm, day ~ month ~ variable)
+cast(aqm, month ~ variable, mean)
+cast(aqm, month ~ . | variable, mean)
+cast(aqm, month ~ variable, mean, margins=c("grand_row", "grand_col"))
+cast(aqm, day ~ month, mean, subset=variable=="ozone")
+cast(aqm, month ~ variable, range)
+cast(aqm, month ~ variable + result_variable, range)
+cast(aqm, variable ~ month ~ result_variable,range)
+
+#Chick weight example
+names(ChickWeight) &lt;- tolower(names(ChickWeight))
+chick_m &lt;- melt(ChickWeight, id=2:4, na.rm=TRUE)
+
+cast(chick_m, time ~ variable, mean) # average effect of time
+cast(chick_m, diet ~ variable, mean) # average effect of diet
+cast(chick_m, diet ~ time ~ variable, mean) # average effect of diet &amp; time
+
+# How many chicks at each time? - checking for balance
+cast(chick_m, time ~ diet, length)
+cast(chick_m, chick ~ time, mean)
+cast(chick_m, chick ~ time, mean, subset=time &lt; 10 &amp; chick &lt; 20)
+
+cast(chick_m, diet + chick ~ time)
+cast(chick_m, chick ~ time ~ diet)
+cast(chick_m, diet + chick ~ time, mean, margins="diet")
+
+#Tips example
+cast(melt(tips), sex ~ smoker, mean, subset=variable=="total_bill")
+cast(melt(tips), sex ~ smoker | variable, mean)
+
+ff_d &lt;- melt(french_fries, id=1:4, na.rm=TRUE)
+cast(ff_d, subject ~ time, length)
+cast(ff_d, subject ~ time, length, fill=0)
+cast(ff_d, subject ~ time, function(x) 30 - length(x))
+cast(ff_d, subject ~ time, function(x) 30 - length(x), fill=30)
+cast(ff_d, variable ~ ., c(min, max))
+cast(ff_d, variable ~ ., function(x) quantile(x,c(0.25,0.5)))
+cast(ff_d, treatment ~ variable, mean, margins=c("grand_col", "grand_row"))
+cast(ff_d, treatment + subject ~ variable, mean, margins="treatment")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>reshape</em> version 0.8.8 <a href="00Index.html">Index</a>]</div>
+</body></html>

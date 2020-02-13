@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Rename</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for rename {reshape}"><tr><td>rename {reshape}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Rename</h2>
+
+<h3>Description</h3>
+
+<p>Rename an object
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>rename(x, replace)</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>object to be renamed</p>
+</td></tr>
+<tr valign="top"><td><code>replace</code></td>
+<td>
+<p>named vector specifying new names</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The rename function provide an easy way to rename the columns of a
+data.frame or the items in a list.</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Hadley Wickham &lt;h.wickham@gmail.com&gt;</p>
+
+
+<h3>Examples</h3>
+
+<pre>rename(mtcars, c(wt = "weight", cyl = "cylinders"))
+a &lt;- list(a = 1, b = 2, c = 3)
+rename(a, c(b = "a", c = "b", a="c")) 
+
+# Example supplied by Timothy Bates
+names &lt;- c("john", "tim", "andy")
+ages &lt;- c(50, 46, 25)
+mydata &lt;- data.frame(names,ages)
+names(mydata) #-&gt; "name",  "ages"
+
+# lets change "ages" to singular.
+# nb: The operation is not done in place, so you need to set your 
+# data to that returned from rename
+
+mydata &lt;- rename(mydata, c(ages="age"))
+names(mydata) #-&gt; "name",  "age"</pre>
+
+<hr /><div style="text-align: center;">[Package <em>reshape</em> version 0.8.8 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,1 @@
+-L/data7/projects/p283_rna_and_disease/projects/sinergia/final_results/scallop/scallop_env//lib -lOsi -lCoinUtils -llapack -lblas -lm

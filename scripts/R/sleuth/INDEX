@@ -1,0 +1,58 @@
+$<-.sleuth              Extend internal '$<-' for sleuth object
+basic_filter            Basic row filter
+design_matrix           Extract design matrix
+excluded_ids            Excluded IDs in Kallisto object
+extract_model           Extract a model from a sleuth object
+gene_from_gene          Get the gene ID using other gene identifiers
+get_bootstrap_summary   bootstrap summary
+get_bootstraps          Extract bootstrap for a specific transcript
+get_col                 Get a data.frame from all kallisto objects
+is_kallisto_subset      Is Kallisto Object Subsetted?
+kallisto_table          Get kallisto abundance table from a sleuth
+                        object
+log_transform           Natural log and offset transformation
+models                  View which models have been fit
+norm_factors            Normalization factors
+plot_bootstrap          Plot bootstrap summary
+plot_fld.kallisto       Plot fragment length distribution
+plot_fld.sleuth         Plot fragment length distribution
+plot_group_density      Plot density
+plot_loadings           Plot Loadings and Interpretations
+plot_ma                 MA plot
+plot_mean_var           Mean-variance relationship
+plot_pc_variance        Plot PC Variance
+plot_pca                Plot PCA
+plot_qq                 QQ plot
+plot_sample_density     Plot sample density
+plot_sample_heatmap     Plot sample heatmap
+plot_scatter            Sample to sample scatter plot
+plot_transcript_heatmap
+                        Plot clustered heatmap
+plot_vars               Plot technical variance versus observed
+                        variance
+plot_volcano            Plot volcano plot
+print.sleuth_model      Print sleuth model
+read_kallisto           Read kallisto output
+read_kallisto_h5        Read a kallisto object from an HDF5 file
+read_kallisto_tsv       Read kallisto plaintext output
+sleuth_deploy           deploy a sleuth object
+sleuth_fit              Fit a measurement error model
+sleuth_gene_table       Create a gene table from a sleuth object
+sleuth_live             Interactive sleuth visualization with Shiny
+sleuth_live_settings    settings for sleuth_live
+sleuth_load             load a sleuth object
+sleuth_lrt              sleuth likelihood ratio test
+sleuth_prep             Constructor for a 'sleuth' object
+sleuth_results          Extract Wald or Likelihood Ratio test results
+                        from a sleuth object
+sleuth_save             save a sleuth object
+sleuth_to_matrix        Convert a sleuth object to matrix
+sleuth_wt               Wald test for a sleuth model
+subset_kallisto         Subset a kallisto object
+transcripts_from_gene   Get the names of the transcripts associated to
+                        a gene
+transform_fun_counts<-
+                        Change sleuth transform counts function
+transform_fun_tpm<-     Change sleuth transform TPM function
+transform_status        Check Transform Sync Status of Sleuth Fits
+write_kallisto_hdf5     Write a kallisto object to HDF5

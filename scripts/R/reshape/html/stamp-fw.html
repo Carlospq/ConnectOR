@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Stamp</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for stamp {reshape}"><tr><td>stamp {reshape}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Stamp</h2>
+
+<h3>Description</h3>
+
+<p>Stamp is like reshape but the &quot;stamping&quot; function is passed the entire data frame, instead of just a few variables.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>stamp(data, formula = . ~ ., fun.aggregate, ..., margins=NULL,
+  subset=TRUE, add.missing=FALSE)</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>data.frame (no molten)</p>
+</td></tr>
+<tr valign="top"><td><code>formula</code></td>
+<td>
+<p>formula that describes arrangement of result, columns ~ rows, see <code><a href="../../stats/html/reshape.html">reshape</a></code> for more information</p>
+</td></tr>
+<tr valign="top"><td><code>fun.aggregate</code></td>
+<td>
+<p>aggregation function to use, should take a data frame as the first argument</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>arguments passed to the aggregation function</p>
+</td></tr>
+<tr valign="top"><td><code>margins</code></td>
+<td>
+<p>margins to compute (character vector, or <code>TRUE</code> for all margins), can contain <code>grand_row</code> or <code>grand_col</code> to inclue grand row or column margins respectively.</p>
+</td></tr>
+<tr valign="top"><td><code>subset</code></td>
+<td>
+<p>logical vector by which to subset the data frame, evaluated in the context of the data frame so you can</p>
+</td></tr>
+<tr valign="top"><td><code>add.missing</code></td>
+<td>
+<p>fill in missing combinations?</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>It is very similar to the <code><a href="../../base/html/by.html">by</a></code> function except in the form
+of the output which is arranged using the formula as in <code><a href="../../stats/html/reshape.html">reshape</a></code>
+</p>
+<p>Note that it's very easy to create objects that R can't print with this
+function.  You will probably want to save the results to a variable and
+then use extract the results.  See the examples.</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Hadley Wickham &lt;h.wickham@gmail.com&gt;</p>
+
+<hr /><div style="text-align: center;">[Package <em>reshape</em> version 0.8.8 <a href="00Index.html">Index</a>]</div>
+</body></html>

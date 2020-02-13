@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Melt a data frame</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for melt.data.frame {reshape}"><tr><td>melt.data.frame {reshape}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Melt a data frame</h2>
+
+<h3>Description</h3>
+
+<p>Melt a data frame into form suitable for easy casting.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>## S3 method for class 'data.frame'
+melt(data, id.vars, measure.vars,
+  variable_name = "variable", na.rm = !preserve.na, preserve.na = TRUE, ...)</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>Data set to melt</p>
+</td></tr>
+<tr valign="top"><td><code>id.vars</code></td>
+<td>
+<p>Id variables. If blank, will use all non measure.vars variables.  Can be integer (variable position) or string (variable name)</p>
+</td></tr>
+<tr valign="top"><td><code>measure.vars</code></td>
+<td>
+<p>Measured variables. If blank, will use all non id.vars variables. Can be integer (variable position) or string (variable name)</p>
+</td></tr>
+<tr valign="top"><td><code>variable_name</code></td>
+<td>
+<p>Name of the variable that will store the names of the original variables</p>
+</td></tr>
+<tr valign="top"><td><code>na.rm</code></td>
+<td>
+<p>Should NA values be removed from the data set?</p>
+</td></tr>
+<tr valign="top"><td><code>preserve.na</code></td>
+<td>
+<p>Old argument name, now deprecated</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>other arguments ignored</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>You need to tell melt which of your variables are id variables, and which
+are measured variables. If you only supply one of <code>id.vars</code> and
+<code>measure.vars</code>, melt will assume the remainder of the variables in the
+data set belong to the other. If you supply neither, melt will assume
+factor and character variables are id variables, and all others are
+measured.</p>
+
+
+<h3>Value</h3>
+
+<p>molten data</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Hadley Wickham &lt;h.wickham@gmail.com&gt;</p>
+
+
+<h3>See Also</h3>
+
+<p><a href="http://had.co.nz/reshape/">http://had.co.nz/reshape/</a></p>
+
+
+<h3>Examples</h3>
+
+<pre>head(melt(tips))
+names(airquality) &lt;- tolower(names(airquality))
+melt(airquality, id=c("month", "day"))
+names(ChickWeight) &lt;- tolower(names(ChickWeight))
+melt(ChickWeight, id=2:4)</pre>
+
+<hr /><div style="text-align: center;">[Package <em>reshape</em> version 0.8.8 <a href="00Index.html">Index</a>]</div>
+</body></html>

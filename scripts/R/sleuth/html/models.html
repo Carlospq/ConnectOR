@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: View which models have been fit</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for models {sleuth}"><tr><td>models {sleuth}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>View which models have been fit</h2>
+
+<h3>Description</h3>
+
+<p>View which models have been fit. sleuth fits data using R formulas
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+models(obj, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>obj</code></td>
+<td>
+<p>a sleuth object, containing kallisto results, usually made by sleuth_prep</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>an R formula showing what has been fit
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# imagine you have a set of samples from input and IP, and input has been set to intercept
+models(so)
+# [full]
+# formula: ~condition
+# coefficients:
+#      (Intercept)
+#      conditionIP
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>sleuth</em> version 0.30.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Melt an array</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for melt.array {reshape}"><tr><td>melt.array {reshape}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Melt an array</h2>
+
+<h3>Description</h3>
+
+<p>This function melts a high-dimensional array into a form that you can use <code><a href="cast-9g.html">cast</a></code> with.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>## S3 method for class 'array'
+melt(data, varnames = names(dimnames(data)), ...)</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>array to melt</p>
+</td></tr>
+<tr valign="top"><td><code>varnames</code></td>
+<td>
+<p>variable names to use in molten data.frame</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>other arguments ignored</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>This code is conceptually similar to <code><a href="../../base/html/table.html">as.data.frame.table</a></code></p>
+
+
+<h3>Author(s)</h3>
+
+<p>Hadley Wickham &lt;h.wickham@gmail.com&gt;</p>
+
+
+<h3>Examples</h3>
+
+<pre>a &lt;- array(1:24, c(2,3,4))
+melt(a)
+melt(a, varnames=c("X","Y","Z"))
+dimnames(a) &lt;- lapply(dim(a), function(x) LETTERS[1:x])
+melt(a)
+melt(a, varnames=c("X","Y","Z"))
+dimnames(a)[1] &lt;- list(NULL)
+melt(a)</pre>
+
+<hr /><div style="text-align: center;">[Package <em>reshape</em> version 0.8.8 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="author" content="Harold Pimentel, Nicolas Bray, Pall Melsted and Lior Pachter" />
+
+<meta name="date" content="2016-06-20" />
+
+<title>Introduction to sleuth</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0A%7D%0Apre%20%7B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+<div id="header">
+<h1 class="title">Introduction to sleuth</h1>
+<h4 class="author"><em>Harold Pimentel, Nicolas Bray, Pall Melsted and Lior Pachter</em></h4>
+<h4 class="date"><em>2016-06-20</em></h4>
+</div>
+
+
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p><strong>sleuth</strong> is a tool for the analysis and comparison of multiple related RNA-Seq experiments. Key features include:</p>
+<ol style="list-style-type: decimal">
+<li>The use of boostraps to ascertain and correct for technical variation in experiments.</li>
+<li>Implemention of a flexible response error measurement model for inference that allows for a multitude of experimental designs.</li>
+<li>Interactive plots that enable real-time exploratory data analysis.</li>
+</ol>
+<p>To use <strong>sleuth</strong>, RNA-Seq data must first be quantified with <a href="http://pachterlab.github.io/kallisto/"><strong>kallisto</strong></a>, which is a program for <em>very</em> fast RNA-Seq quantification based on pseudo-alignment. An important feature of <strong>kallisto</strong> is that it outputs bootstraps along with the estimates of transcript abundances. These can serve as proxies for technical replicates, allowing for an ascertainment of the variability in estimates due to the random processes underlying RNA-Seq as well as the statistical procedure of read assignment. <strong>kallisto</strong> can quantify 30 million human reads in less than 3 minutes on a Mac desktop computer using only the read sequences and a transcriptome index that itself takes less than 10 minutes to build. <strong>sleuth</strong> has also been designed to be lightweight and fast, and therefore RNA-Seq analysis with <strong>kallisto</strong> and <strong>sleuth</strong> is tractable on a laptop computer in a matter of minutes.</p>
+<p>The model <strong>sleuth</strong> uses for performing differential analysis is a general linear model where there is error in the response. Formally, in the case of two conditions being assayed, for a transcript <span class="math inline">\(t\)</span> in a sample <span class="math inline">\(i\)</span>, the (log) “true” unobserved abundance <span class="math inline">\(y_i\)</span> measured in read counts is modeled by</p>
+<p><span class="math display">\[ y_{t,i} = \beta_{t,0} + \beta_{t,1} x_{t,i} + \epsilon_{t,i} \]</span></p>
+<p>where <span class="math inline">\(x_{t,i}\)</span> is an indicator variable describing the condition, <span class="math inline">\(\beta_{t,0}\)</span> and <span class="math inline">\(\beta_{t,1}\)</span> are parameters of the model and <span class="math inline">\(\epsilon_{t,i}\)</span> is biological “noise”. However, conditioned on <span class="math inline">\(x_i\)</span> and <span class="math inline">\(y_i\)</span> the estimated number of counts from the observations in the experiment is given by</p>
+<p><span class="math display">\[ d_{t,i} = y_{t,i} + \zeta_{t,i} \]</span></p>
+<p>where <span class="math inline">\(\zeta_{t,i}\)</span> represents technical “noise”, i.e. uncertainty in the measurement due to effects other than biological variability. The <strong>sleuth</strong> model incorporates the assumptions that the expectation <span class="math inline">\(E(\zeta_{t,i}|y_{t,i}) = 0\)</span>, that <span class="math inline">\(E(d_{t,i}) = \beta_{t,0} + \beta_{t,1} x_{t,i}\)</span> and that the response error is <em>additive</em>, i.e. if the variance <span class="math inline">\(V(\epsilon_{t,i}) = \sigma_t^2\)</span> and the variance <span class="math inline">\(V(\zeta_{t,i}|y_{t,i}) = \tau_t^2\)</span> then the variance <span class="math inline">\(V(d_{t,i}) = \sigma_{t}^2 + \tau_{t}^2\)</span>. <strong>sleuth</strong> makes use of the boostraps from <strong>kallisto</strong> to estimate the <span class="math inline">\(\tau_t^2\)</span>, and after subtracting the estimated technical variance the <span class="math inline">\(\sigma_t^2\)</span> are estimated via a shrinkage procedure similar to that used in <a href="http://www.genomebiology.com/2014/15/2/R29">Limma Voom</a>.</p>
+<p>More generally, <strong>sleuth</strong> can be used to analyze multiple conditions organized in complex experimental designs. In the general case the unobserved model is given by</p>
+<p><span class="math display">\[ Y_t = X_t \beta_t + \epsilon_t \]</span></p>
+<p>where <span class="math inline">\(t\)</span> is a transcript, <span class="math inline">\(Y_t\)</span> is a vector of length <span class="math inline">\(n\)</span> where <span class="math inline">\(n\)</span> is the number of samples, <span class="math inline">\(X_t\)</span> is an <span class="math inline">\(n \times p\)</span> matrix where <span class="math inline">\(p\)</span> is the number of covariates, <span class="math inline">\(\beta_t\)</span> represents the effect sizes and is a vector of length <span class="math inline">\(p\)</span>, and <span class="math inline">\(\epsilon_t\)</span> is a vector of length <span class="math inline">\(n\)</span>. The observed response is described by</p>
+<p><span class="math display">\[ D_t = Y_t + \zeta_t \]</span></p>
+<p>where <span class="math inline">\(\zeta_t\)</span> and <span class="math inline">\(D_t\)</span> are vectors of length <span class="math inline">\(n\)</span>.</p>
+<p><strong>sleuth</strong> has been designed to facilitate the exploration of RNA-Seq data by utilizing the <a href="http://shiny.rstudio.com">Shiny</a> web application framework by RStudio. The worked example below illustrates how to load data into <strong>sleuth</strong> and how to open Shiny plots for exploratory data analysis. The code underlying all plots is available via the Shiny interface so that analyses can be fully “open source”.</p>
+</div>
+<div id="installation" class="section level2">
+<h2>Installation</h2>
+<p>To install <strong>sleuth</strong> start <a href="https://www.r-project.org">R</a> and first install <code>rhdf5</code> by typing:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">&quot;http://bioconductor.org/biocLite.R&quot;</span>)
+<span class="kw">biocLite</span>(<span class="st">&quot;rhdf5&quot;</span>)</code></pre></div>
+<p>Then install devtools by typing</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;devtools&quot;</span>)</code></pre></div>
+<p>and install <strong>sleuth</strong> by typing</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools::<span class="kw">install_github</span>(<span class="st">&quot;pachterlab/sleuth&quot;</span>)</code></pre></div>
+<p>Next load <strong>sleuth</strong> with</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;sleuth&quot;</span>)</code></pre></div>
+</div>
+<div id="example" class="section level2">
+<h2>Example</h2>
+<p>To explain how to use <strong>sleuth</strong> we provide an example based on the data in the “Cuffdiff2 paper”:</p>
+<ul>
+<li><a href="http://www.nature.com/nbt/journal/v31/n1/full/nbt.2450.html">Differential analysis of gene regulation at transcript resolution with RNA-seq</a> by Cole Trapnell, David G Henderickson, Martin Savageau, Loyal Goff, John L Rinn and Lior Pachter, Nature Biotechnology <strong>31</strong>, 46–53 (2013).</li>
+</ul>
+<p>The human fibroblast RNA-Seq data for the paper is available on GEO at accession <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE37704">GSE37704</a>. The samples to be analyzed are the six samples LFB_scramble_hiseq_repA, LFB_scramble_hiseq_repB, LFB_scramble_hiseq_repC, LFB_HOXA1KD_hiseq_repA, LFB_HOXA1KD_hiseq_repA, and LFB_HOXA1KD_hiseq_repC. These are three biological replicates in each of two conditions (scramble and HoxA1 knockdown) that will be compared with <strong>sleuth</strong>.</p>
+<p>To analyze the data, first download the raw reads, install <strong>kallisto</strong> and then quantify the data with boostraps as described <a href="http://pachterlab.github.io/kallisto/starting.html">here</a>. This step can be skipped for the purposes of the vignette, by downloading the <strong>kallisto</strong> processed data directly by clicking <a href="http://bio.math.berkeley.edu/sleuth/cuffdiff2/cuffdiff2_data_kallisto_results.zip">here</a>.</p>
+<p>The first step in a <strong>sleuth</strong> analysis is to specify where the <strong>kallisto</strong> results are stored. Begin by storing the base directory of the results in a variable,</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">base_dir &lt;-<span class="st"> &quot;~/Downloads/cuffdiff2_data_kallisto_results&quot;</span></code></pre></div>
+<p>Next get the list of sample IDs with</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sample_id &lt;-<span class="st"> </span><span class="kw">dir</span>(<span class="kw">file.path</span>(base_dir,<span class="st">&quot;results&quot;</span>))</code></pre></div>
+<p>The result can be displayed by typing</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sample_id</code></pre></div>
+<pre><code>## [1] &quot;SRR493366&quot; &quot;SRR493367&quot; &quot;SRR493368&quot; &quot;SRR493369&quot; &quot;SRR493370&quot; &quot;SRR493371&quot;</code></pre>
+<p>In the box above, lines beginning with ## show the output of the command (in what follows we include the output that should appear with each command).</p>
+<p>A list of paths to the <strong>kallisto</strong> results indexed by the sample IDs is collated with</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">kal_dirs &lt;-<span class="st"> </span><span class="kw">sapply</span>(sample_id, function(id) <span class="kw">file.path</span>(base_dir, <span class="st">&quot;results&quot;</span>, id, <span class="st">&quot;kallisto&quot;</span>))
+kal_dirs</code></pre></div>
+<pre><code>##                                                                SRR493366 
+## &quot;~/Downloads/cuffdiff2_data_kallisto_results/results/SRR493366/kallisto&quot; 
+##                                                                SRR493367 
+## &quot;~/Downloads/cuffdiff2_data_kallisto_results/results/SRR493367/kallisto&quot; 
+##                                                                SRR493368 
+## &quot;~/Downloads/cuffdiff2_data_kallisto_results/results/SRR493368/kallisto&quot; 
+##                                                                SRR493369 
+## &quot;~/Downloads/cuffdiff2_data_kallisto_results/results/SRR493369/kallisto&quot; 
+##                                                                SRR493370 
+## &quot;~/Downloads/cuffdiff2_data_kallisto_results/results/SRR493370/kallisto&quot; 
+##                                                                SRR493371 
+## &quot;~/Downloads/cuffdiff2_data_kallisto_results/results/SRR493371/kallisto&quot;</code></pre>
+<p>The next step is to load an auxillary table that describes the experimental design and the relationship between the kallisto directories and the samples:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s2c &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="kw">file.path</span>(base_dir, <span class="st">&quot;hiseq_info.txt&quot;</span>), <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">stringsAsFactors=</span><span class="ot">FALSE</span>)
+s2c &lt;-<span class="st"> </span>dplyr::<span class="kw">select</span>(s2c, <span class="dt">sample =</span> run_accession, condition)
+s2c</code></pre></div>
+<pre><code>##      sample condition
+## 1 SRR493366  scramble
+## 2 SRR493367  scramble
+## 3 SRR493368  scramble
+## 4 SRR493369   HOXA1KD
+## 5 SRR493370   HOXA1KD
+## 6 SRR493371   HOXA1KD</code></pre>
+<p>Now, we must enter the directories into a column in the table describing the experiment. This column must be labeled <code>path</code>, otherwise sleuth will throw an error. This is to ensure that the user can check which samples correspond to which kallisto runs.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s2c &lt;-<span class="st"> </span>dplyr::<span class="kw">mutate</span>(s2c, <span class="dt">path =</span> kal_dirs)</code></pre></div>
+<p>The user should check whether or not the order is correct. In this case, the kallisto output is correctly matched with the sample identifiers.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(s2c)</code></pre></div>
+<pre><code>##      sample condition
+## 1 SRR493366  scramble
+## 2 SRR493367  scramble
+## 3 SRR493368  scramble
+## 4 SRR493369   HOXA1KD
+## 5 SRR493370   HOXA1KD
+## 6 SRR493371   HOXA1KD
+##                                                                     path
+## 1 ~/Downloads/cuffdiff2_data_kallisto_results/results/SRR493366/kallisto
+## 2 ~/Downloads/cuffdiff2_data_kallisto_results/results/SRR493367/kallisto
+## 3 ~/Downloads/cuffdiff2_data_kallisto_results/results/SRR493368/kallisto
+## 4 ~/Downloads/cuffdiff2_data_kallisto_results/results/SRR493369/kallisto
+## 5 ~/Downloads/cuffdiff2_data_kallisto_results/results/SRR493370/kallisto
+## 6 ~/Downloads/cuffdiff2_data_kallisto_results/results/SRR493371/kallisto</code></pre>
+<p>Now the “sleuth object” can be constructed. This requires four commands that (1) load the kallisto processed data into the object (2) estimate parameters for the <strong>sleuth</strong> response error measurement (full) model (3) estimate parameters for the <strong>sleuth</strong> reduced model, and (4) perform differential analysis (testing). On a laptop the four steps should take about a few minutes altogether.</p>
+<p>First type</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">so &lt;-<span class="st"> </span><span class="kw">sleuth_prep</span>(s2c, ~<span class="st"> </span>condition)</code></pre></div>
+<pre><code>## reading in kallisto results</code></pre>
+<pre><code>## ......</code></pre>
+<pre><code>## </code></pre>
+<pre><code>## normalizing est_counts</code></pre>
+<pre><code>## 50844 targets passed the filter</code></pre>
+<pre><code>## normalizing tpm</code></pre>
+<pre><code>## merging in metadata</code></pre>
+<pre><code>## normalizing bootstrap samples</code></pre>
+<pre><code>## summarizing bootstraps</code></pre>
+<p>then fit the full model</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">so &lt;-<span class="st"> </span><span class="kw">sleuth_fit</span>(so)</code></pre></div>
+<pre><code>## fitting measurement error models</code></pre>
+<pre><code>## shrinkage estimation</code></pre>
+<pre><code>## computing variance of betas</code></pre>
+<p>Next, we fit the reduced model. In this case, the reduced model is the intercept-only model:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">so &lt;-<span class="st"> </span><span class="kw">sleuth_fit</span>(so, ~<span class="dv">1</span>, <span class="st">'reduced'</span>)</code></pre></div>
+<pre><code>## fitting measurement error models</code></pre>
+<pre><code>## shrinkage estimation</code></pre>
+<pre><code>## computing variance of betas</code></pre>
+<p>and finally perform the test:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">so &lt;-<span class="st"> </span><span class="kw">sleuth_lrt</span>(so, <span class="st">'reduced'</span>, <span class="st">'full'</span>)</code></pre></div>
+<p>In general, we can test models that are nested using the likelihood ratio test. Viewing models which have been fit can be done using the <code>models()</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">models</span>(so)</code></pre></div>
+<pre><code>## [  full  ]
+## formula:  ~condition 
+## coefficients:
+##  (Intercept)
+##      conditionscramble
+## [  reduced  ]
+## formula:  ~1 
+## coefficients:
+##  (Intercept)</code></pre>
+<div id="including-gene-names-into-transcript-level-analysis" class="section level3">
+<h3>Including gene names into transcript-level analysis</h3>
+<p>At this point the sleuth object constructed from the kallisto runs has information about the data, the experimental design, the <strong>kallisto</strong> estimates, the model fit, and the testing. In other words it contains the entire analysis of the data. There is, however, one piece of information that can be useful to add in, but that is optional. In reading the kallisto output <strong>sleuth</strong> has no information about <em>genes</em>, but this can be added allowing for searching and analysis by gene instead of transcript.</p>
+<p>Since the example was constructed with the ENSEMBL human transcriptome, we will add gene names from ENSEMBL using biomaRt (there are other ways to do this as well):</p>
+<p>First, install biomaRt with</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">&quot;http://bioconductor.org/biocLite.R&quot;</span>)
+<span class="kw">biocLite</span>(<span class="st">&quot;biomaRt&quot;</span>)</code></pre></div>
+<p>Then collect gene names with</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mart &lt;-<span class="st"> </span>biomaRt::<span class="kw">useMart</span>(<span class="dt">biomart =</span> <span class="st">&quot;ENSEMBL_MART_ENSEMBL&quot;</span>,
+  <span class="dt">dataset =</span> <span class="st">&quot;hsapiens_gene_ensembl&quot;</span>,
+  <span class="dt">host =</span> <span class="st">'ensembl.org'</span>)</code></pre></div>
+<p>and add them into the <strong>sleuth</strong> table with</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">t2g &lt;-<span class="st"> </span>biomaRt::<span class="kw">getBM</span>(<span class="dt">attributes =</span> <span class="kw">c</span>(<span class="st">&quot;ensembl_transcript_id&quot;</span>, <span class="st">&quot;ensembl_gene_id&quot;</span>,
+    <span class="st">&quot;external_gene_name&quot;</span>), <span class="dt">mart =</span> mart)
+t2g &lt;-<span class="st"> </span>dplyr::<span class="kw">rename</span>(t2g, <span class="dt">target_id =</span> ensembl_transcript_id,
+  <span class="dt">ens_gene =</span> ensembl_gene_id, <span class="dt">ext_gene =</span> external_gene_name)
+so &lt;-<span class="st"> </span><span class="kw">sleuth_prep</span>(s2c, ~<span class="st"> </span>condition, <span class="dt">target_mapping =</span> t2g)</code></pre></div>
+<pre><code>## reading in kallisto results</code></pre>
+<pre><code>## ......</code></pre>
+<pre><code>## </code></pre>
+<pre><code>## normalizing est_counts</code></pre>
+<pre><code>## 50844 targets passed the filter</code></pre>
+<pre><code>## normalizing tpm</code></pre>
+<pre><code>## merging in metadata</code></pre>
+<pre><code>## normalizing bootstrap samples</code></pre>
+<pre><code>## summarizing bootstraps</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">so &lt;-<span class="st"> </span><span class="kw">sleuth_fit</span>(so)</code></pre></div>
+<pre><code>## fitting measurement error models</code></pre>
+<pre><code>## shrinkage estimation</code></pre>
+<pre><code>## computing variance of betas</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">so &lt;-<span class="st"> </span><span class="kw">sleuth_fit</span>(so, ~<span class="dv">1</span>, <span class="st">'reduced'</span>)</code></pre></div>
+<pre><code>## fitting measurement error models</code></pre>
+<pre><code>## shrinkage estimation</code></pre>
+<pre><code>## computing variance of betas</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">so &lt;-<span class="st"> </span><span class="kw">sleuth_lrt</span>(so, <span class="st">'reduced'</span>, <span class="st">'full'</span>)</code></pre></div>
+<p>This addition of metadata to transcript IDs is very general, and can be used to add in other information.</p>
+<p>The best way to view the results is to generate the Shiny webpage that allows for exploratory data analysis:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sleuth_live</span>(so)</code></pre></div>
+<p>To generate a table of results for analysis within R type</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results_table &lt;-<span class="st"> </span><span class="kw">sleuth_results</span>(so, <span class="st">'reduced:full'</span>, <span class="dt">test_type =</span> <span class="st">'lrt'</span>)</code></pre></div>
+</div>
+<div id="gene-level-analysis" class="section level3">
+<h3>Gene level analysis</h3>
+<p>Assuming <code>biomaRt</code> has been installed as in the previous step, sleuth can also be run in the ‘gene aggregation’ mode. In addition to requiring a <code>target_mapping</code>, a string which references a column to aggregate by, (<code>aggregation_column</code>). In our example, we could use <code>ens_gene</code> or <code>ext_gene</code>. It is preferable to use <code>ens_gene</code> as <code>ext_gene</code> tends to be a bit redundant.</p>
+<p>The modified sleuth prep command looks as follows:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">so &lt;-<span class="st"> </span><span class="kw">sleuth_prep</span>(s2c, ~condition, <span class="dt">target_mapping =</span> t2g,
+  <span class="dt">aggregation_column =</span> <span class="st">'ens_gene'</span>)</code></pre></div>
+<pre><code>## reading in kallisto results</code></pre>
+<pre><code>## ......</code></pre>
+<pre><code>## </code></pre>
+<pre><code>## normalizing est_counts</code></pre>
+<pre><code>## 50844 targets passed the filter</code></pre>
+<pre><code>## normalizing tpm</code></pre>
+<pre><code>## merging in metadata</code></pre>
+<pre><code>## normalizing bootstrap samples</code></pre>
+<pre><code>## summarizing bootstraps</code></pre>
+<pre><code>## aggregating by column: ens_gene</code></pre>
+<pre><code>## 14412 genes passed the filter</code></pre>
+<p>The remainder of the pipeline is unchanged. When running <code>sleuth_live</code> or <code>sleuth_results</code>, the gene column you selected will be listed as <code>target_id</code>, rather than the transcript name.</p>
+<p><code>sleuth_prep</code> might take a bit longer here because aggregation has to be done amongst all of the bootstraps as well. We are currently working to speed this up and expect to release it along with several memory improvements in the next version (0.28.2). One way to speed this up is to use more processes (assuming you have more cores). Internally, <code>sleuth</code> uses the function <code>parallel::mclapply</code>. You can set the number of cores as follows:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># set the number of available cores to 4</span>
+<span class="kw">options</span>(<span class="dt">mc.cores =</span> 4L)</code></pre></div>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Convert a sleuth object to matrix</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for sleuth_to_matrix {sleuth}"><tr><td>sleuth_to_matrix {sleuth}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Convert a sleuth object to matrix</h2>
+
+<h3>Description</h3>
+
+<p>Convert a sleuth object to a matrix with the condition names.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+sleuth_to_matrix(obj, which_df, which_units)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>obj</code></td>
+<td>
+<p>a <code>sleuth</code> object</p>
+</td></tr>
+<tr valign="top"><td><code>which_df</code></td>
+<td>
+<p>character vector of length one. Which type of data to use
+(&quot;obs_norm&quot; or &quot;obs_raw&quot;)</p>
+</td></tr>
+<tr valign="top"><td><code>which_units</code></td>
+<td>
+<p>character vector of length one. Which units to use (&quot;tpm&quot;
+or &quot;est_counts&quot; (for transcript-level analyses) or &quot;scaled_reads_per_base&quot; (for gene-level analyses))</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a matrix which contains a matrix of target_ids and transcript (or gene) expression in <code>which_units</code>.
+Note this currently does not support returning raw values for gene-level counts or TPMs.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+sleuth_matrix &lt;- sleuth_to_matrix(sleuth_obj, 'obs_norm', 'tpm')
+head(sleuth_matrix) # look at first 5 transcripts, sorted by name
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>sleuth</em> version 0.30.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

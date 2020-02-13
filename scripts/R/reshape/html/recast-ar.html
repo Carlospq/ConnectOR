@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Recast</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for recast {reshape}"><tr><td>recast {reshape}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Recast</h2>
+
+<h3>Description</h3>
+
+<p><a href="melt-24.html">melt</a> and <a href="cast-9g.html">cast</a> data in a single step
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>recast(data, formula, ..., id.var, measure.var)</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>Data set to melt</p>
+</td></tr>
+<tr valign="top"><td><code>formula</code></td>
+<td>
+<p>Casting formula, see <a href="cast-9g.html">cast</a> for specifics</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Other arguments passed to <a href="cast-9g.html">cast</a></p>
+</td></tr>
+<tr valign="top"><td><code>id.var</code></td>
+<td>
+<p>Identifying variables. If blank, will use all non measure.var variables</p>
+</td></tr>
+<tr valign="top"><td><code>measure.var</code></td>
+<td>
+<p>Measured variables. If blank, will use all non id.var variables</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>This conveniently wraps melting and casting a data frame into
+one step.</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Hadley Wickham &lt;h.wickham@gmail.com&gt;</p>
+
+
+<h3>See Also</h3>
+
+<p><a href="http://had.co.nz/reshape/">http://had.co.nz/reshape/</a></p>
+
+
+<h3>Examples</h3>
+
+<pre>recast(french_fries, time ~ variable, id.var=1:4)</pre>
+
+<hr /><div style="text-align: center;">[Package <em>reshape</em> version 0.8.8 <a href="00Index.html">Index</a>]</div>
+</body></html>

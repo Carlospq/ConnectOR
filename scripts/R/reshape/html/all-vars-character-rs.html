@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Get all variables</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for all.vars.character {reshape}"><tr><td>all.vars.character {reshape}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Get all variables</h2>
+
+<h3>Description</h3>
+
+<p>All variables in character string of formula.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>all.vars.character(formula, blank.char = ".")</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>formula</code></td>
+<td>
+</td></tr>
+<tr valign="top"><td><code>blank.char</code></td>
+<td>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Removes .</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Hadley Wickham &lt;h.wickham@gmail.com&gt;</p>
+
+
+<h3>Examples</h3>
+
+<pre>all.vars.character("a + b")
+all.vars.character("a + b | c")
+all.vars.character("a + b")
+all.vars.character(". ~ a + b")
+all.vars.character("a ~ b | c + d + e")</pre>
+
+<hr /><div style="text-align: center;">[Package <em>reshape</em> version 0.8.8 <a href="00Index.html">Index</a>]</div>
+</body></html>

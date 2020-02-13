@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Add all combinations</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for add.all.combinations {reshape}"><tr><td>add.all.combinations {reshape}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Add all combinations</h2>
+
+<h3>Description</h3>
+
+<p>Add all combinations of the given rows and columns to the data frames.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>add.all.combinations(data, vars = list(NULL), fill=NA)</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>data.frame</p>
+</td></tr>
+<tr valign="top"><td><code>vars</code></td>
+<td>
+<p>variables (list of character vectors)</p>
+</td></tr>
+<tr valign="top"><td><code>fill</code></td>
+<td>
+<p>value to fill structural missings with</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>This function is used to ensure that we have a matrix of the appropriate
+dimensionaliy with no missing cells.</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Hadley Wickham &lt;h.wickham@gmail.com&gt;</p>
+
+
+<h3>Examples</h3>
+
+<pre>rdunif &lt;- 
+function(n=20, min=0, max=10) floor(runif(n,min, max))
+df &lt;- data.frame(a = rdunif(), b = rdunif(),c = rdunif(), result=1:20)
+add.all.combinations(df)
+add.all.combinations(df, list("a", "b"))
+add.all.combinations(df, list("a", "b"), fill=0)
+add.all.combinations(df, list(c("a", "b")))
+add.all.combinations(df, list("a", "b", "c"))
+add.all.combinations(df, list(c("a", "b"), "c"))
+add.all.combinations(df, list(c("a", "b", "c")))</pre>
+
+<hr /><div style="text-align: center;">[Package <em>reshape</em> version 0.8.8 <a href="00Index.html">Index</a>]</div>
+</body></html>

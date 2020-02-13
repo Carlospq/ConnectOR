@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Plot clustered heatmap</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for plot_transcript_heatmap {sleuth}"><tr><td>plot_transcript_heatmap {sleuth}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Plot clustered heatmap</h2>
+
+<h3>Description</h3>
+
+<p>Plot a clustered heatmap. The clustering is done by the hclust function.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+plot_transcript_heatmap(obj, transcripts, units = "tpm", trans = "log",
+  cluster_transcripts = FALSE, offset = 1, color_high = "#581845",
+  color_mid = "#FFC300", color_low = "#DAF7A6", x_axis_angle = 50,
+  annotation_cols = setdiff(colnames(obj$sample_to_covariates), "sample"),
+  ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>obj</code></td>
+<td>
+<p>a <code>sleuth</code> object</p>
+</td></tr>
+<tr valign="top"><td><code>transcripts</code></td>
+<td>
+<p>a vector of strings containing a list of transcripts to be plotted in a heatmap</p>
+</td></tr>
+<tr valign="top"><td><code>units</code></td>
+<td>
+<p>a string specifying which units to use, either tpm or est_counts (scaled_reads_per_base for gene_mode)</p>
+</td></tr>
+<tr valign="top"><td><code>trans</code></td>
+<td>
+<p>a function or a string specifying a function to transform
+the data by</p>
+</td></tr>
+<tr valign="top"><td><code>cluster_transcripts</code></td>
+<td>
+<p>whether the transcripts also should be clustered.
+default is <code>FALSE</code></p>
+</td></tr>
+<tr valign="top"><td><code>offset</code></td>
+<td>
+<p>how much should be added to estimated expression before
+transformation? Default is 1.</p>
+</td></tr>
+<tr valign="top"><td><code>color_high</code></td>
+<td>
+<p>the 'high expression' color (default: dark red)</p>
+</td></tr>
+<tr valign="top"><td><code>color_low</code></td>
+<td>
+<p>the 'low expression' color (default: light green)</p>
+</td></tr>
+<tr valign="top"><td><code>x_axis_angle</code></td>
+<td>
+<p>the angle at which to put the x-axis labels</p>
+</td></tr>
+<tr valign="top"><td><code>annotation_cols</code></td>
+<td>
+<p>a character vector of covariates from
+<code>sample_to_covariates</code> that should be annotated on the heatmap</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>additional arguments to customize the heatmap. passed to
+<code>pheatmap</code>. See ?pheatmap for documentation on additional options.</p>
+</td></tr>
+<tr valign="top"><td><code>color_mide</code></td>
+<td>
+<p>the 'medium expression' color (default: yellow)</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a <code>ggplot</code> object
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>sleuth</em> version 0.30.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

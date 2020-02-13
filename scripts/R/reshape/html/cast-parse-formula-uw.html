@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Cast parse formula</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for cast_parse_formula {reshape}"><tr><td>cast_parse_formula {reshape}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Cast parse formula</h2>
+
+<h3>Description</h3>
+
+<p>Parse formula for casting
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>cast_parse_formula(formula = "...  ~ variable", varnames)</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>formula</code></td>
+<td>
+</td></tr>
+<tr valign="top"><td><code>varnames</code></td>
+<td>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>@value row character vector of row names
+@value col character vector of column names
+@value aggregate boolean whether aggregation will occur
+@keyword internal</p>
+
+
+<h3>Value</h3>
+
+<table summary="R valueblock">
+<tr valign="top"><td><code>row</code></td>
+<td>
+<p>character vector of row names</p>
+</td></tr>
+<tr valign="top"><td><code>col</code></td>
+<td>
+<p>character vector of column names</p>
+</td></tr>
+<tr valign="top"><td><code>aggregate</code></td>
+<td>
+<p>boolean whether aggregation will occur</p>
+</td></tr>
+</table>
+
+
+<h3>Author(s)</h3>
+
+<p>Hadley Wickham &lt;h.wickham@gmail.com&gt;</p>
+
+
+<h3>Examples</h3>
+
+<pre>cast_parse_formula("a + ...", letters[1:6])
+cast_parse_formula("a | ...", letters[1:6])
+cast_parse_formula("a + b ~ c ~ . | ...", letters[1:6])</pre>
+
+<hr /><div style="text-align: center;">[Package <em>reshape</em> version 0.8.8 <a href="00Index.html">Index</a>]</div>
+</body></html>

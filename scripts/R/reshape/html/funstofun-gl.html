@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Aggregate multiple functions into a single function</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for funstofun {reshape}"><tr><td>funstofun {reshape}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Aggregate multiple functions into a single function</h2>
+
+<h3>Description</h3>
+
+<p>Combine multiple functions to a single function returning a named vector of outputs
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>funstofun(...)</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>functions to combine</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Each function should produce a single number as output</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Hadley Wickham &lt;h.wickham@gmail.com&gt;</p>
+
+
+<h3>Examples</h3>
+
+<pre>funstofun(min, max)(1:10)
+funstofun(length, mean, var)(rnorm(100))</pre>
+
+<hr /><div style="text-align: center;">[Package <em>reshape</em> version 0.8.8 <a href="00Index.html">Index</a>]</div>
+</body></html>

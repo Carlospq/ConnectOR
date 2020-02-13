@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Apply a Function to a Data Frame split by levels of indices</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for sparseby {reshape}"><tr><td>sparseby {reshape}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Apply a Function to a Data Frame split by levels of indices</h2>
+
+<h3>Description</h3>
+
+<p>Function <code>sparseby</code> is a modified version of <code><a href="../../base/html/by.html">by</a></code> for
+<code><a href="../../base/html/tapply.html">tapply</a></code> applied to data frames.  It always returns
+a new data frame rather than a multi-way array. </p>
+
+
+<h3>Usage</h3>
+
+<pre>
+sparseby(data, INDICES = list(), FUN, ..., GROUPNAMES = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>an <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> object, normally a data frame, possibly a matrix.</p>
+</td></tr>
+<tr valign="top"><td><code>INDICES</code></td>
+<td>
+<p> a variable or list of variables indicating the subgroups of <code>data</code> </p>
+</td></tr>
+<tr valign="top"><td><code>FUN</code></td>
+<td>
+<p>a function to be applied to data frame subsets of <code>data</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>further arguments to <code>FUN</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>GROUPNAMES</code></td>
+<td>
+<p>a logical variable indicating whether the group names should be
+bound to the result</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>A data frame or matrix is split by row into data frames or matrices respectively subsetted by the values of one or more factors, and function <code>FUN</code> is applied to each subset in turn.
+</p>
+<p><code>sparseby</code> is much faster and more memory efficient than <code><a href="../../base/html/by.html">by</a></code> or <code><a href="../../base/html/tapply.html">tapply</a></code> in the situation where the combinations of <code>INDICES</code> present in the data form a sparse subset of all possible combinations.
+</p>
+
+
+<h3>Value</h3>
+
+ 
+<p>A data frame or matrix containing the results of <code>FUN</code> applied to each subgroup of the matrix. The result depends on what is returned from <code>FUN</code>:
+</p>
+<p>If <code>FUN</code> returns <code>NULL</code> on any subsets, those are dropped.
+</p>
+<p>If it returns a single value or a vector of values, the length must be consistent across all subgroups. These will be returned as values in rows of the resulting data frame or matrix.
+</p>
+<p>If it returns data frames or matrices, they must all have the same number of columns, and they will be bound with <code><a href="../../base/html/cbind.html">rbind</a></code> into a single data frame or matrix.
+</p>
+<p>Names for the columns will be taken from the names in the list of <code>INDICES</code> or from the results of <code>FUN</code>, as appropriate.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Duncan Murdoch</p>
+
+
+<h3>See Also</h3>
+
+ <p><code><a href="../../base/html/tapply.html">tapply</a></code>, <code><a href="../../base/html/by.html">by</a></code> </p>
+
+
+<h3>Examples</h3>
+
+<pre>
+x &lt;- data.frame(index=c(rep(1,4),rep(2,3)),value=c(1:7))
+x
+sparseby(x,x$index,nrow)
+
+# The version below works entirely in matrices
+x &lt;- as.matrix(x)
+sparseby(x,list(group = x[,"index"]), function(subset) c(mean=mean(subset[,2])))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>reshape</em> version 0.8.8 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,35 @@
+Package: sleuth
+Title: Tools for investigating RNA-Seq
+Version: 0.30.0
+Authors@R: c(
+  person("Harold", "Pimentel", , "haroldpimentel@gmail.com", role = c("aut", "cre")),
+  person("Warren", "McGee", , "warren-mcgee@fsm.northwestern.edu", role = "aut"))
+Description: Investigate transcript abundance from "kallisto" and differential
+    expression analysis from RNA-Seq data.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+URL: https://github.com/pachterlab/sleuth
+BugReports: https://github.com/pachterlab/sleuth/issues
+Depends: R (>= 3.2.1), methods
+Imports: ggplot2, dplyr, data.table, tidyr, reshape2, rhdf5, parallel,
+        lazyeval, matrixStats, pheatmap, shiny, aggregation
+Suggests: MASS, lintr, testthat, knitr
+VignetteBuilder: knitr
+RoxygenNote: 6.0.1
+RemoteType: github
+RemoteHost: api.github.com
+RemoteRepo: sleuth
+RemoteUsername: pachterlab
+RemoteRef: master
+RemoteSha: 24ca2859f13d1eac588d6dd2ac90bf860b4fe07e
+GithubRepo: sleuth
+GithubUsername: pachterlab
+GithubRef: master
+GithubSHA1: 24ca2859f13d1eac588d6dd2ac90bf860b4fe07e
+NeedsCompilation: no
+Packaged: 2019-03-28 15:43:09 UTC; cpulido
+Author: Harold Pimentel [aut, cre],
+  Warren McGee [aut]
+Maintainer: Harold Pimentel <haroldpimentel@gmail.com>
+Built: R 3.5.1; ; 2019-03-28 15:43:12 UTC; unix

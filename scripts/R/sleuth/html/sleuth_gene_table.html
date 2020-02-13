@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Create a gene table from a sleuth object</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for sleuth_gene_table {sleuth}"><tr><td>sleuth_gene_table {sleuth}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Create a gene table from a sleuth object</h2>
+
+<h3>Description</h3>
+
+<p>Take in a sleuth object with added genes, and return a data table in which genes
+list the most significant transcript mapping to themselves
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+sleuth_gene_table(obj, test, test_type = "lrt", which_model = "full",
+  which_group = "ens_gene")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>obj</code></td>
+<td>
+<p>a <code>sleuth</code> object</p>
+</td></tr>
+<tr valign="top"><td><code>test</code></td>
+<td>
+<p>a character string denoting which beta to use</p>
+</td></tr>
+<tr valign="top"><td><code>test_type</code></td>
+<td>
+<p>either 'wt' for Wald test or 'lrt' for likelihood ratio test</p>
+</td></tr>
+<tr valign="top"><td><code>which_model</code></td>
+<td>
+<p>a character string denoting which model to use</p>
+</td></tr>
+<tr valign="top"><td><code>which_group</code></td>
+<td>
+<p>a character string denoting which gene group to use</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a <code>data.frame</code> with the following columns
+</p>
+<p>gene name; if ext_gene name specified, it will be legible gene name.
+If ens_gene name, it will be an Ensemble gene (assuming user followed the vignette)
+</p>
+<p>most_sig_trancript: Most significant transcript for the given gene
+</p>
+<p>pval: p-value for the test chosen
+</p>
+<p>qval: False discovery rate normalized p-value (Benjamini-Hochberg, see: <code><a href="../../stats/html/p.adjust.html">p.adjust</a></code>)
+</p>
+<p>num_transcripts: Total number of transcripts for the given gene
+</p>
+<p>list_of_transcripts: All transcripts associated with this gene
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+sleuth_genes &lt;- sleuth_gene_table(so, 'conditionIP', test_type ='wt',
+                                  which_group = 'ext_gene')
+head(sleuth_genes) # show info for first 5 genes
+sleuth_genes[1:5, 6] # show transcripts for first 5 genes
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>sleuth</em> version 0.30.0 <a href="00Index.html">Index</a>]</div>
+</body></html>
