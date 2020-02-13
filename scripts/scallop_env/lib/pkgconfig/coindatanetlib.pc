@@ -1,9 +1,0 @@
-prefix=/data7/projects/p283_rna_and_disease/projects/sinergia/final_results/scallop/scallop_env/
-datadir=${prefix}/share/coin/Data/Netlib
-
-Name: Netlib
-Description: Netlib models
-URL: https://projects.coin-or.org/svn/Data/Netlib
-Version: 1.2.6
-Libs:
-Cflags:
