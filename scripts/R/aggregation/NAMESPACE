@@ -1,5 +1,0 @@
-export(fisher)
-export(lancaster)
-export(sidak)
-importFrom("stats", "pchisq", "qgamma")
-
