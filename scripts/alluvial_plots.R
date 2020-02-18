@@ -115,7 +115,6 @@ alluvial_plot <- function(sp1, sp2, path = "./classification/"){
 #####################################################################################################
 #sp1="hg38"
 #sp2="mm10"
-#alluvial_plot("hg38","mm10")
 
 args = commandArgs(trailingOnly=TRUE)
 sp1=args[1]
