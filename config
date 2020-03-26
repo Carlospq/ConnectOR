@@ -1,4 +1,3 @@
 specie	assembly_version	annotation	chainmap
-Human	hg38	/data/projects/p283_rna_and_disease/projects/carlos/ConnectOR.v0.01/GTFs/connector_new_hg38.gtf
-Mouse	mm10	/data/projects/p283_rna_and_disease/projects/carlos/ConnectOR.v0.01/GTFs/connector_new_mm10.gtf
-ZebraFish	danrer10	/data/projects/p283_rna_and_disease/projects/carlos/ConnectOR.v0.01/GTFs/connector_new_danrer10.gtf
+Human38	hg38	/home/carlos/Documents/ConnectOR/GTFs/hg38.gencode.simplified.gtf
+Mouse	mm10	/home/carlos/Documents/ConnectOR/GTFs/mm10.gencode.simplified.gtf
