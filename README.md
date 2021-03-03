@@ -3,19 +3,19 @@ multiple Species Orthology Finder
 
 ## Prerequisites:
 - Python:
-  pickle
-  pandas
-  numpy
-  networkx
-  matplotlib
-  json
-  tqdm
+pickle
+pandas
+numpy
+networkx
+matplotlib
+json
+tqdm
  
- -R:
-  ggplot2
-  gridExtra
-  ggplotify
-  dplyr
+- R:
+ggplot2
+gridExtra
+ggplotify
+dplyr
   
 - BedTools
 
