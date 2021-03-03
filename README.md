@@ -1,5 +1,6 @@
 # ConnectOR
 multiple Species Orthology Finder
+![alt text](https://github.com/Carlospq/ConnectOR/ConnectOR.npg "ConnectOR summary")
 
 ## Prerequisites:
 - Python:
