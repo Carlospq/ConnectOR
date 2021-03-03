@@ -1,5 +1,5 @@
 # ConnectOR
-multiple Species Orthology Finder
+Multiple Species Orthology Finder
 
 
 ![alt text](https://raw.githubusercontent.com/Carlospq/ConnectOR/master/ConnectOR.png "ConnectOR summary")
