@@ -27,7 +27,7 @@ Following folders/files must be in the same path from command is executed:
   - ./scripts/
  
 ## config example (Tab delimited file):
-species assembly_version   annotation chainmap
+|species|assembly_version|annotation|chainmap|
 Human hg38  /path/to/human.gtf
 Mouse	mm10	/path/to/mouse.gtf
 Zebrafish danRer10 /path/to/zebrafish.gtf
