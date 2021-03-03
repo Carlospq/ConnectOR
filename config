@@ -1,3 +1,4 @@
-specie	assembly_version	annotation	chainmap
-Human38	hg38	/home/carlos/Documents/ConnectOR/GTFs/hg38.gencode.simplified.gtf
-Mouse	mm10	/home/carlos/Documents/ConnectOR/GTFs/mm10.gencode.simplified.gtf
+species	assembly_version	annotation	chainmap
+Human	hg19	/mnt/c/Users/Carlos/Desktop/ConnectOR/GTFs/PLAR_human.gtf
+Mouse	mm9	/mnt/c/Users/Carlos/Desktop/ConnectOR/GTFs/PLAR_mouse.gtf
+ZebraFish	danrer7	/mnt/c/Users/Carlos/Desktop/ConnectOR/GTFs/PLAR_zebrafish.gtf
