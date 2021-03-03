@@ -3,9 +3,9 @@ multiple Species Orthology Finder
 
 ## Prerequisites:
 - Python:
-  *pickle
-  *pandas
-  *numpy
+  * pickle
+  pandas
+  numpy
    networkx
    matplotlib
    json
