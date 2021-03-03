@@ -38,7 +38,8 @@ Following folders/files must be in the same path from command is executed:
    **annotation [optional]**: path to the gtf (recommended to use full path)  
    **chainmap [optional]**: comma separated path to each chainmap needed for the analysis (eg for human: "path/to/human_to_mouse.chainmap,path/to/human_to_zebrafish.chainmap"  
 
-You can execute ConnectOR as follows:
+## Execution command:
+You can execute ConnectOR from the command line as follows:
    $ python ConnectOR.py
   
 
