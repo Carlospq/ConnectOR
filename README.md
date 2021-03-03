@@ -24,6 +24,7 @@ To execute connector clone this repository locally.
 Following folders/files must be in the same path from command is executed:
   - ConnectOR.py
   - config
+  - dictionaries
   - ./scripts/
  
 ## config example (Tab delimited file):
