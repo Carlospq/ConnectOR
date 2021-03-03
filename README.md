@@ -40,6 +40,6 @@ Following folders/files must be in the same path from command is executed:
 
 ## Execution command:
 You can execute ConnectOR from the command line as follows:
-   $ python ConnectOR.py
+   **$ python ConnectOR.py**  
   
 
