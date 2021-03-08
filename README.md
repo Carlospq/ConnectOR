@@ -5,7 +5,7 @@ Multiple Species Orthology Finder
 ![alt text](https://raw.githubusercontent.com/Carlospq/ConnectOR/master/ConnectOR.png "ConnectOR summary")
 
 ## Prerequisites:
-- Python:
+- Python3:
   * pickle
   * pandas
   * numpy
