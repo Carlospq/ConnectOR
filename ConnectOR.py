@@ -228,6 +228,7 @@ def bed_sort(sp_v):
         
         
 def gene_map_to_dict(file_name):
+	# Not used, DEPRECATED
     d = {}
     finput = fileinput.FileInput(files=file_name)
     for line in finput:
@@ -244,6 +245,12 @@ def transcript_map_to_dict(file_name, dl = "\t"):
     with open(file_name, 'r') as f:
         for line in f:
             line = line.strip().split(dl)
+            # Cases with diferent transcript biotype for same geneID
+            if line[2] in dict_:
+            	# Prioritize PC biotype
+                if dict_[line[2]]["gene_type"] == "pc":
+                    line[3] = "pc"
+
             dict_[line[2]] = {"transcript_ID": line[0],
                               "gene_id": line[1],
                               "gene_type": line[3]}
@@ -655,7 +662,7 @@ def get_clusters_stats(components, G, level, output_path="./counts/", species_na
         i=0
         for node in nodes:
             i+=1
-            print("\r%.2f%s Cluster %s of %s (%s/%s genes in cluster)             "%(int(idx)/len(components)*100, "%", str(idx), str(len(components)), i, str(len(g.nodes()))) , end= "\r", file=sys.stderr)
+            #print("\r%.2f%s Cluster %s of %s (%s/%s genes in cluster)             "%(int(idx)/len(components)*100, "%", str(idx), str(len(components)), i, str(len(g.nodes()))) , end= "\r", file=sys.stderr)
             predictions = "|".join([";".join([e[1][1], e[1][0],e[1][2]]) for e in edges if node == e[0]])
             biotype = node[2]
             data2 = {'Gene Name': node[1],
@@ -670,6 +677,8 @@ def get_clusters_stats(components, G, level, output_path="./counts/", species_na
         
             #Get connections in cluster only for sp1 and sp2
             for sp in species:
+                data2["Gene to "+sp] = ""
+                sps_in_cluster = [sp for sp in org_comp_count if org_comp_count[sp] > 0]
                 sc = ""
                 #sp == sp1: don't analyze
                 if sp == node[0]:
@@ -693,12 +702,20 @@ def get_clusters_stats(components, G, level, output_path="./counts/", species_na
                     #Gene with same (one) in and out prediction
                     if in_d == 1 and out_d == 1 and n_type == 1:
                         ort_type = "One to one"
-                    #Gene with no in_prediction but out_predictions
-                    elif in_d == 0 and out_d == 1:
-                        ort_type = "One to half"
-                    #Gene with in_prediction but no out_predictions
                     elif in_d == 1 and out_d == 0:
                         ort_type = "One to half"
+                    elif in_d == 0 and out_d == 1:
+                        ort_type = "One to half"
+                    #Gene with no in_prediction but out_predictions or viceversa
+                    elif (in_d == 0 and out_d >= 1) or (in_d >= 1 and out_d == 0):
+                        sp_tmp = [x[0] for x in c if len(c)>0 and x[1] != node[1]]
+                        if len(sp_tmp) == 1:
+                            ort_type = "One to half"
+                        elif len(sp_tmp) > 1:
+                            if node[1]=="XLOC_023975_hg19": print(comp_idx_x[x_to_comp_idx[node[1]]["idx"]]["links"])
+                            ort_type = "One to many"
+                        for sp_ in sp_tmp:
+                            data2["Gene to "+sp_] = ort_type
                     #Gene with (> one) different in_prediction and out_predictions
                     elif in_d >= 0 and out_d >= 0 and n_type >= 0:
                         ort_type = "One to many"            
@@ -706,7 +723,11 @@ def get_clusters_stats(components, G, level, output_path="./counts/", species_na
                     elif in_d == 0 and out_d == 0:
                         ort_type = "One to none" 
 
-                data2["Gene to "+sp] = ort_type
+                #Assign empty string to species not present in this cluster
+                if sp in sps_in_cluster:
+                    data2["Gene to "+sp] = ort_type
+                else:
+                    data2["Gene to "+sp] = ""
 
             o2.write(','.join(data2[x] for x in header_genes)+'\n')
     
@@ -1144,13 +1165,16 @@ for input_file in files:
                                        "many_to_many": 0,
                                        "gene_info": gene_info}
         
+# Change map file used to generate (again) biotype dictionary to *transcriptID_geneID_map.txt
 gene_type = {}
-for input_file in [x for x in os.listdir("./maps") if "geneName" in x]:
+#for input_file in [x for x in os.listdir("./maps") if "geneName" in x]:
+for input_file in [x for x in os.listdir("./maps") if "transcriptID_geneID_map.txt" in x]:
     sp = input_file.split(".")[0]
-    df_geneType = pd.read_csv(path.join("./maps/",input_file),
-                     sep='\t',
-                     names=['gene_id', 'gene_name', 'gene_type'])
-    gt = df_geneType.set_index('gene_name').T.to_dict()
+    # df_geneType = pd.read_csv(path.join("./maps/",input_file),
+    #                  sep='\t',
+    #                  names=['gene_id', 'gene_name', 'gene_type'])
+    # gt = df_geneType.set_index('gene_name').T.to_dict()
+    gt = transcript_map_to_dict(path.join("./maps/",input_file))
     gene_type[sp] = gt
 	
 ## Find clusters
@@ -1192,8 +1216,10 @@ for file in classification_files:
             EDGES_EXON.append(edge)
 
         for gene_gene in row.gnames:
-            edge = ((org_source, gene_source, sp1_biotype), (org_destin, gene_gene, sp2_biotype)) 
+            sp2_biotype = gene_type[org_destin][gene_gene]["gene_type"]
+            edge = ((org_source, gene_source, sp1_biotype), (org_destin, gene_gene, sp2_biotype))
             EDGES_GENE.append(edge)
+
 
 # Create network (clusters)
 G_exon = nx.DiGraph()
