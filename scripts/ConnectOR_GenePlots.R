@@ -2,10 +2,6 @@ library(ggplot2)
 library(gridExtra)
 library(ggplotify)
 library(dplyr)
-#setwd("X:/p283/projects/ConnectOR/") #Cluster Laptop
-#setwd("Z:/p283/projects/ConnectOR/") #Cluster PC
-#setwd("C:/Users/pulido/Desktop/ConnectOR/") #Laptop
-#setwd("C:/Users/Carlos/Desktop/ConnectOR") #PC
 
 ##### Functions #####
 read_df <- function(df_type, sp1=FALSE, sp2=FALSE){
