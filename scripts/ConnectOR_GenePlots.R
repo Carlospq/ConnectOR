@@ -179,7 +179,20 @@ dev.off()
 cluster_stats_counts_sps()
 cluster_genes_counts_sps()
 
+#Plot genes Lifted/nonLifted
+names(counter_lifted)[names(counter_lifted) == "V3"] <- "Gene.Biotype"
+counter_lifted$Lifted_Biotype <- paste0(counter_lifted$lifted, "_", counter_lifted$Gene.Biotype)
 
+pdf(paste0("./plots/", "lifted_genes.pdf"))
+p <- ggplot(data=counter_lifted, aes(x=Lifted_Biotype, y=Freq, group=level, fill=level, label=Freq)) +
+      geom_bar(stat="identity", position=position_dodge()) +
+      ggtitle(paste0("Genes Lifted/nonLifted")) +
+      labs(y="Number of genes", x = "") +
+      facet_grid(Sp~SpTo, scales = "free", space='free_x') +
+      plots_theme +
+      geom_text(aes(label=Freq), position=position_dodge(width=0.9), hjust=0.1, vjust=0.5, angle = 35)
+print(p)
+dev.off()
 
 
 
