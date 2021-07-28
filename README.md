@@ -56,14 +56,18 @@ ConnectOR (v.2.0)
 By: Carlos Pulido (carlos.pulido@dbmr.unibe.ch)
 
 optional arguments:
-  -h, --help            show this help message and exit
-  -mM MINMATCH, --minMatch MINMATCH
-                        0.N Minimum ratio of bases that must remap in liftOver
-                        step.Default: 30 (0.30 minimum ratio)
-  -g, --gene            Generate results at gene level along with exon level
-                        results (default: False)
+
+  -h, --help            show this help message and exit\
+ -mM MINMATCH, --minMatch MINMATCH\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                        0.N Minimum ratio of bases that must remap in liftOver\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                        step.Default: 30 (0.30 minimum ratio)\
+ -g, --gene            Generate results at gene level along with exon level\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                        results (default: False)\
   
-## Gene Clustering - Human (v38) vs Mouse (vM27) - GENCODE
+## Gene Clustering 
+![Image not available](https://raw.githubusercontent.com/Carlospq/ConnectOR/master/raw/Clustering.png "ConnectOR summary")
+
+## Orthology - Human (v38) vs Mouse (vM27) - GENCODE
 ![Image not available](https://raw.githubusercontent.com/Carlospq/ConnectOR/master/raw/GENCODE_hg38_mm10.png "ConnectOR summary")
 
 Summary table example:
