@@ -68,5 +68,6 @@ optional arguments:
 ![Image not available](https://raw.githubusercontent.com/Carlospq/ConnectOR/master/raw/Clustering.png "Gene Clustering")
 
 
-## ConnectOR - Human.v38 vs Mouse.vM27 - GENCODE 
+## ConnectOR - Human.v38 vs Mouse.vM27 - GENCODE
+https://docs.google.com/viewer?url=https://raw.githubusercontent.com/Carlospq/ConnectOR/master/raw/gene_stats_all.pdf
 <embed src="https://raw.githubusercontent.com/Carlospq/ConnectOR/master/raw/gene_stats_all.pdf" type="application/pdf" />
