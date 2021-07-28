@@ -64,10 +64,4 @@ optional arguments:
                         results (default: False)
   
 ## Gene Clustering
-
-![Image not available](https://raw.githubusercontent.com/Carlospq/ConnectOR/master/raw/Clustering.png "Gene Clustering")
-
-
-## ConnectOR - Human.v38 vs Mouse.vM27 - GENCODE
-https://docs.google.com/viewer?url=https://raw.githubusercontent.com/Carlospq/ConnectOR/master/raw/gene_stats_all.pdf
-<embed src="https://raw.githubusercontent.com/Carlospq/ConnectOR/master/raw/gene_stats_all.pdf" type="application/pdf" />
+![Image not available](https://raw.githubusercontent.com/Carlospq/ConnectOR/master/raw/GENCODE_hg38_mm10.png "ConnectOR summary")
