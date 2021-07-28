@@ -63,5 +63,5 @@ optional arguments:
   -g, --gene            Generate results at gene level along with exon level
                         results (default: False)
   
-## Gene Clustering
+## Gene Clustering - Human (v38) vs Mouse (vM27) - GENCODE
 ![Image not available](https://raw.githubusercontent.com/Carlospq/ConnectOR/master/raw/GENCODE_hg38_mm10.png "ConnectOR summary")
