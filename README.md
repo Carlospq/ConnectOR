@@ -24,6 +24,8 @@ Changes in V2:
   * gridExtra
   * ggplotify
   * dplyr
+  * scales
+  * ggrepel
   
 - BedTools
 
