@@ -52,7 +52,8 @@ Following folders/files must be in the same path from command is executed:
 ## Execution command:
 usage: ConnectOR.v2.py [-h] [-mM MINMATCH] [-g]
 
-ConnectOR (v.2.0)By: Carlos Pulido (carlos.pulido@dbmr.unibe.ch)
+ConnectOR (v.2.0)
+By: Carlos Pulido (carlos.pulido@dbmr.unibe.ch)
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -62,4 +63,14 @@ optional arguments:
   -g, --gene            Generate results at gene level along with exon level
                         results (default: False)
   
+## Gene Clustering
 
+![alt text](https://raw.githubusercontent.com/Carlospq/ConnectOR/master/Clustering.png "Gene Clustering")
+
+
+## ConnectOR - Human.v38 vs Mouse.vM27 - GENCODE 
+<object data="https://raw.githubusercontent.com/Carlospq/ConnectOR/master/gene_stats_all.pdf" type="application/pdf" width="700px" height="700px">
+    <embed src="https://raw.githubusercontent.com/Carlospq/ConnectOR/master/gene_stats_all.pdf">
+        <p>This browser does not support PDFs. Please download the PDF to view it: <a href="https://raw.githubusercontent.com/Carlospq/ConnectOR/master/gene_stats_all.pdf">Download PDF</a>.</p>
+    </embed>
+</object>
