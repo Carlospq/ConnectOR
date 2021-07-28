@@ -50,7 +50,16 @@ Following folders/files must be in the same path from command is executed:
    **chainmap [optional]**: comma separated path to each chainmap needed for the analysis (eg for human: "path/to/human_to_mouse.chainmap,path/to/human_to_zebrafish.chainmap"  
 
 ## Execution command:
-You can execute ConnectOR from the command line as follows:
-   **$ python ConnectOR.py**  
+usage: ConnectOR.v2.py [-h] [-mM MINMATCH] [-g]
+
+ConnectOR (v.2.0)By: Carlos Pulido (carlos.pulido@dbmr.unibe.ch)
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -mM MINMATCH, --minMatch MINMATCH
+                        0.N Minimum ratio of bases that must remap in liftOver
+                        step.Default: 30 (0.30 minimum ratio)
+  -g, --gene            Generate results at gene level along with exon level
+                        results (default: False)
   
 
