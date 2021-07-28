@@ -1,5 +1,11 @@
-# ConnectOR
+# ConnectOR (v2.0 - 28/07/2021)
 Multiple Species Orthology Finder
+
+Changes in V2:
+* Depuration of code
+* Simplification and optimization of gene clustering step
+* Enhanced summary plot visualization
+* Enhanced summary gene sheet
 
 
 ![alt text](https://raw.githubusercontent.com/Carlospq/ConnectOR/master/ConnectOR.png "ConnectOR summary")
