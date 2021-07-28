@@ -65,3 +65,9 @@ optional arguments:
   
 ## Gene Clustering - Human (v38) vs Mouse (vM27) - GENCODE
 ![Image not available](https://raw.githubusercontent.com/Carlospq/ConnectOR/master/raw/GENCODE_hg38_mm10.png "ConnectOR summary")
+
+Summary table example:
+| Gene ID | Species | Biotype | Cluster ID | Cluster Biotype | Cluster type | Gene to hg38 | Gene to mm10 | Orthologues | in_degree | out_degree |
+| ---     | ---     | ---     | ---        | ---             | ---          | ---          | ---          | ---         | ---       | ---        |
+| ENSMUSG00000107586.2 | mm10 | ncRNA | 832 | ncRNA | One to one | Predicted |  | ENSMUSG00000058922.8;Gm10052;ncRNA;chr9:0:123519257:- | 1 | 1 |
+| ENSMUSG00000058922.8 | hg38 | ncRNA | 832 | ncRNA | One to one |  | Predicted | ENSMUSG00000107586.2;Gm44283;ncRNA;chr2:0:37909179:- | 1 | 1 |
