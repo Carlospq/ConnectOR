@@ -69,8 +69,4 @@ optional arguments:
 
 
 ## ConnectOR - Human.v38 vs Mouse.vM27 - GENCODE 
-<object data="https://raw.githubusercontent.com/Carlospq/ConnectOR/master/raw/gene_stats_all.pdf" type="application/pdf" width="700px" height="700px">
-    <embed src="https://raw.githubusercontent.com/Carlospq/ConnectOR/master/raw/gene_stats_all.pdf">
-        <p>This browser does not support PDFs. Please download the PDF to view it: <a href="https://raw.githubusercontent.com/Carlospq/ConnectOR/master/raw/gene_stats_all.pdf">Download PDF</a>.</p>
-    </embed>
-</object>
+<embed src="https://raw.githubusercontent.com/Carlospq/ConnectOR/master/raw/gene_stats_all.pdf" type="application/pdf" />
