@@ -73,5 +73,5 @@ optional arguments:
 Summary table example:
 | Gene ID | Species | Biotype | Cluster ID | Cluster Biotype | Cluster type | Gene to hg38 | Gene to mm10 | Orthologues | in_degree | out_degree |
 | ---     | ---     | ---     | ---        | ---             | ---          | ---          | ---          | ---         | ---       | ---        |
-| ENSMUSG00000107586.2 | mm10 | ncRNA | 832 | ncRNA | One to one | Predicted |  | ENSMUSG00000058922.8;Gm10052;ncRNA;chr9:0:123519257:- | 1 | 1 |
-| ENSMUSG00000058922.8 | hg38 | ncRNA | 832 | ncRNA | One to one |  | Predicted | ENSMUSG00000107586.2;Gm44283;ncRNA;chr2:0:37909179:- | 1 | 1 |
+| ENSMUSG00000085871.2 | mm10 | ncRNA | 3434 | ncRNA | One to one |  | Predicted | ENSG00000223949.8;ROR1-AS1;ncRNA;chr1:0:64171342:- | 1 | 1 |
+| ENSG00000223949.8 | hg38 | ncRNA | 3434 | ncRNA | One to one | Predicted |  | ENSMUSG00000085871.2;Ube2uos;ncRNA;chr4:0:100384998:- | 1 | 1 |
