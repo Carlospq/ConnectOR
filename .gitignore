@@ -1,6 +1,4 @@
 ./*/R/*
 
-*.pdf
-*.png
-*.ai
+./*/.ai
 README.md
