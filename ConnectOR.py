@@ -166,7 +166,7 @@ def generate_maps(arg_list):
             if not geneID in genes:
                 genes[geneID] = {"gene_name": gene_name,
                                  "gene_type": gene_biotype,
-                                 "coordinates": [line[0],str(0),str(0),line[6]],
+                                 "coordinates": [line[0],line[3],line[4],line[6]],
                                  "transcripts": []}
                 
             transcriptID = arguments["transcript_id"]
