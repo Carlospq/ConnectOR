@@ -638,10 +638,14 @@ for i in config_df.index:
     
     #Add and download default annotations in config if not provided
     if not config_df.loc[i]["annotation"]:
-        default_gtf = dictionaries["gtfs_ensembl_r98"][config_df.loc[i]["assembly_version"].lower()].split("/")[-1]
+        if "danrer" in config_df.loc[i]["assembly_version"]:
+        	default_gtf = dictionaries["gtfs_ensembl_r98"][config_df.loc[i]["assembly_version"].lower()].split("/")[-1]
+        	download_default_files(dictionaries["gtfs_ensembl_r98"][config_df.loc[i]["assembly_version"]], "GTFs")
+        else:
+        	default_gtf = dictionaries["gtfs"][config_df.loc[i]["assembly_version"].lower()].split("/")[-1]
+        	download_default_files(dictionaries["gtfs"][config_df.loc[i]["assembly_version"]], "GTFs")
         config_df.at[i, 'default'] = change_default("gtf", "True", config_df, i)
-        config_df.at[i, 'annotation'] = "GTFs/"+default_gtf
-        download_default_files(dictionaries["gtfs_ensembl_r98"][config_df.loc[i]["assembly_version"]], "GTFs")
+        config_df.at[i, 'annotation'] = "GTFs/"+default_gtf	        
     else:
         check_file([config_df.loc[i]["annotation"]])
         
@@ -682,7 +686,7 @@ pool = mp.Pool(mp.cpu_count())
 pool.map(generate_beds, gtfFiles_assembly_level)
 pool.close()
     
-    
+ 
 ### LifOver exons/genes
 check_folder("liftovers")
 print("LiftOver features between species...")

@@ -19,8 +19,8 @@ plots_theme <-  theme_classic() +
         axis.text.y = element_text(size = 14, hjust = 1),
         axis.title = element_text(size = 18),
         strip.text = element_text(size = 14),
-        strip.background = element_rect(colour = NA, fill=c(NA,NA)))
-color_labels <- c("#238A8D","#FFD176")
+        strip.background = element_rect(colour = NA, fill=c(NA,NA))) 
+
 
 ##### Functions #####
 read_df <- function(df_type, sp1=FALSE, sp2=FALSE, gl=gene_level){
@@ -89,12 +89,18 @@ ticks_df <- prepare_ticks_df(genes_stats_df)
 pdf(paste0("./plots/", "gene_stats_all.pdf"), width=9, height=12)
 p <- ggplot(genes_stats_df, aes(x=Species, y=Ratio, label=Count, fill=Cluster.type)) +
             geom_bar(stat='identity') +
+            labs(y="Percent genes", x="Reference annotations") +
+            # Scale & Colors
             scale_y_continuous(labels = insert_minor(seq(0,100,25),4), breaks = seq(0,1,length.out = 21)) +
-            scale_fill_brewer("Orthology", palette = "BuGn") +
+            #scale_fill_brewer("Orthology", palette = "BuGn") +
+            scale_fill_manual(values = c("#238B45", "#74C476", "#BAE4B3", "#EDF8E9", "Grey", "Darkgrey")) +
+            # Facets (splitting the plot)
             facet_grid(Biotype~Level, scales = "free", space='free_x') +
+            # Labels (Total number of genes per category)
             geom_label_repel(aes(x=Species, y=Ratio, label=Count, group=Biotype), 
                              position = position_stack(vjust = .5),
                              show.legend = FALSE) +
+            # Labels for total percent of genes with predicted orthology
             geom_text(data = ticks_df, aes(x = Species, y = ticks, label=ticks_label,
                                            group=Biotype, color=Species, fill=Cluster.type), 
                                        hjust = -1.65,

@@ -1,4 +1,12 @@
 ./*/R/*
 
 ./*/*.ai
+./GTFs
+./BEDs
+./chainmaps
+./liftovers
+./maps
+./overlaps
+./orthology
+./counts
 README.md

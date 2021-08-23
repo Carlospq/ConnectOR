@@ -1,4 +1,3 @@
 species	assembly_version	annotation	chainmap
-Human	hg19	/mnt/c/Users/Carlos/Desktop/ConnectOR/GTFs/PLAR_human.gtf
-Mouse	mm9	/mnt/c/Users/Carlos/Desktop/ConnectOR/GTFs/PLAR_mouse.gtf
-ZebraFish	danrer7	/mnt/c/Users/Carlos/Desktop/ConnectOR/GTFs/PLAR_zebrafish.gtf
+Human	hg38	GTFs/gencode.v32.PC_lncRNA.gtf
+Mouse	mm10	GTFs/gencode.vM22.PC_lncRNA.gtf
