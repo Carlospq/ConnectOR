@@ -285,7 +285,7 @@ def liftOver(arg_list):
     
     print("\t{} {} to {}... mapping".format(sp1, feature, sp2))
     oldFile = "BEDs/{}.{}.bed".format(sp1, feature)
-    map_chain = [chain for chain in config_df.loc[config_df["assembly_version"]==sp1, "chainmap"].iloc[0].split(",") if sp2 in chain.lower()][0]
+    map_chain = [chain for chain in config_df.loc[config_df["assembly_version"]==sp1, "chainmap"].iloc[0].split(",") if sp2.lower() in chain.lower()][0]
     newFile = "liftovers/{}to{}.{}.liftover".format(sp1, sp2, feature)
     unMapped= "liftovers/{}to{}.{}.unmapped".format(sp1, sp2, feature)
     os.system("./scripts/liftOver -minMatch={} {} {} {} {}".format(mM/100, oldFile, map_chain, newFile, unMapped))
@@ -629,26 +629,23 @@ print("Checking Config_file...")
 config_df = read_config("./config")
 config_df.set_index("species", inplace = True)
 config_df["default"] = "False|False"
-for i in config_df.index:
-    
+for i in config_df.index: 
     #Check if assembly_version exists in dictionaries
     if not config_df.loc[i]["assembly_version"].lower() in dictionaries["chain_maps"]:
         print("'%s' is not a valid assembly_version. Please use one of the following values for default analysis: %s"%(config_df.loc[i]["assembly_version"], ",".join(dictionaries["chain_maps"])))
-        sys.exit(1)
-    
+        sys.exit(1) 
     #Add and download default annotations in config if not provided
     if not config_df.loc[i]["annotation"]:
-        if "danrer" in config_df.loc[i]["assembly_version"]:
+        if "danrer" in config_df.loc[i]["assembly_version"].lower():
         	default_gtf = dictionaries["gtfs_ensembl_r98"][config_df.loc[i]["assembly_version"].lower()].split("/")[-1]
-        	download_default_files(dictionaries["gtfs_ensembl_r98"][config_df.loc[i]["assembly_version"]], "GTFs")
+        	download_default_files(dictionaries["gtfs_ensembl_r98"][config_df.loc[i]["assembly_version"].lower()], "GTFs")
         else:
         	default_gtf = dictionaries["gtfs"][config_df.loc[i]["assembly_version"].lower()].split("/")[-1]
-        	download_default_files(dictionaries["gtfs"][config_df.loc[i]["assembly_version"]], "GTFs")
+        	download_default_files(dictionaries["gtfs"][config_df.loc[i]["assembly_version"].lower()], "GTFs")
         config_df.at[i, 'default'] = change_default("gtf", "True", config_df, i)
         config_df.at[i, 'annotation'] = "GTFs/"+default_gtf	        
     else:
-        check_file([config_df.loc[i]["annotation"]])
-        
+        check_file([config_df.loc[i]["annotation"]])      
     #Add and download default chainmaps in config if not provided
     if not config_df.loc[i]["chainmap"]:
         chainmaps = []
@@ -685,7 +682,11 @@ gtfFiles_assembly_level = list( zip( list(config_df["annotation"]), list(config_
 pool = mp.Pool(mp.cpu_count())
 pool.map(generate_beds, gtfFiles_assembly_level)
 pool.close()
-    
+
+# Remove possible exon duplications due to different isoforms in GTF files
+for fileName in os.listdir("BEDs"):
+    call = 'sort %s | uniq > %s; mv %s %s'%('BEDs/'+fileName, 'BEDs/tmp.bed', 'BEDs/tmp.bed', 'BEDs/'+fileName)
+    subprocess.call(call, shell=True, executable='/bin/bash')
  
 ### LifOver exons/genes
 check_folder("liftovers")
@@ -987,7 +988,39 @@ if len(species) > 2:
 
                 gene_to_comp_idx, comp_idx_gene = generate_components_stats(components_gene, G_gene)
                 get_clusters_stats(components_gene, G_gene, "gene", species_names=[sp1, sp2])
-                
+
+
+### Predictions to list format with specific exonic coordinates predictions
+exonOverlap_dict = {}
+for sp1 in species:
+    gene_type[sp1] = geneID_map_to_dict('maps/%s.geneID_map.txt'%(sp1))
+    for sp2 in species:
+        if sp1 == sp2: continue
+        gene_type[sp2] = geneID_map_to_dict('maps/%s.geneID_map.txt'%(sp2))
+        with open("".join(["overlaps/", sp1, "to", sp2, ".exons.overlap"]), 'r') as handle:
+            for line in handle:
+                line = line.strip().split("\t")
+                if line[6] == ".": continue             # No overlap found
+                exonID1 = line[3]
+                exonID2 = line[9]
+                geneID1 = exonID1.split("|")[0]
+                geneID2 = exonID2.split("|")[0]
+                if not geneID1 in exonOverlap_dict:
+                    exonOverlap_dict[geneID1] = {}
+                if not exonID1 in exonOverlap_dict[geneID1]:
+                    exonOverlap_dict[geneID1][exonID1] = {}
+                if not exonID2 in exonOverlap_dict[geneID1][exonID1]:
+                    outInfo = [sp1, gene_type[sp1][geneID1]["gene_type"], exonID1, sp2, gene_type[sp2][geneID2]["gene_type"], exonID2]
+                    exonOverlap_dict[geneID1][exonID1][exonID2] = outInfo
+
+
+with open('counts/exon_coordinates.tsv', 'w') as outhandle:
+    for gene in exonOverlap_dict:
+        for exon1 in exonOverlap_dict[gene]:
+            for exon2 in exonOverlap_dict[gene][exon1]:
+                outhandle.write("\t".join(exonOverlap_dict[gene][exon1][exon2])+"\n")
+
+
 
 ### Plotting results
 check_folder("plots")
