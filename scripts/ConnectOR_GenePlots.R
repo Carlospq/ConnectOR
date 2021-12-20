@@ -57,7 +57,8 @@ read_df <- function(df_type, sp1=FALSE, sp2=FALSE, gl=gene_level){
             pos = (cumsum(Ratio) - 0.5 * Ratio))
            #, label = percent(Ratio %>% round(2)))
   df$Cluster.type <- factor(df$Cluster.type, levels = c("One to one", "One to half", "One to many", "Many to many", "One to none", "Not lifted"))
-  df[df$Count==0, "Count"] <- ""
+  #df[df$Count==0, "Count"] <- ""
+  df <- df[df$Count!=0, ]
   
   return(df)
 }
