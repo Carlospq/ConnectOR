@@ -1,3 +1,3 @@
 species	assembly_version	annotation	chainmap
-Zebrafish	danrer11
-Human	hg38
+Zebrafish	danrer11	/mnt/c/Users/cpulidoq/Documents/ConnectOR/Danio_rerio.GRCz11.105.chr.gtf.gz
+Human	hg38	/mnt/c/Users/cpulidoq/Documents/ConnectOR/gencode.v39.annotation.gtf.gz
