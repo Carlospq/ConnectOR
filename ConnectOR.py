@@ -1013,34 +1013,43 @@ if len(species) > 2:
 
 
 ### Predictions to list format with specific exonic coordinates predictions
-exonOverlap_dict = {}
+exonPrediction_dict = {}
 for sp1 in species:
-    gene_type[sp1] = geneID_map_to_dict('maps/%s.geneID_map.txt'%(sp1))
-    for sp2 in species:
-        if sp1 == sp2: continue
-        gene_type[sp2] = geneID_map_to_dict('maps/%s.geneID_map.txt'%(sp2))
-        with open("".join(["overlaps/", sp1, "to", sp2, ".exons.overlap"]), 'r') as handle:
-            for line in handle:
-                line = line.strip().split("\t")
-                if line[6] == ".": continue             # No overlap found
-                exonID1 = line[3]
-                exonID2 = line[9]
-                geneID1 = exonID1.split("|")[0]
-                geneID2 = exonID2.split("|")[0]
-                if not geneID1 in exonOverlap_dict:
-                    exonOverlap_dict[geneID1] = {}
-                if not exonID1 in exonOverlap_dict[geneID1]:
-                    exonOverlap_dict[geneID1][exonID1] = {}
-                if not exonID2 in exonOverlap_dict[geneID1][exonID1]:
-                    outInfo = [sp1, gene_type[sp1][geneID1]["gene_type"], exonID1, sp2, gene_type[sp2][geneID2]["gene_type"], exonID2]
-                    exonOverlap_dict[geneID1][exonID1][exonID2] = outInfo
+	# Get gene biotype
+	gene_type[sp1] = geneID_map_to_dict('maps/%s.geneID_map.txt'%(sp1))
+	for sp2 in species:
+		if sp1 == sp2: continue
+		gene_type[sp2] = geneID_map_to_dict('maps/%s.geneID_map.txt'%(sp2))
+		with open("".join(["overlaps/", sp1, "to", sp2, ".exons.overlap"]), 'r') as handle:
+			for line in handle:
+				line = line.strip().split("\t")
+				#if line[6] == ".": continue             # No overlap found
+				exonID1 = line[3]
+				exonID2 = line[9]
+				geneID1 = exonID1.split("|")[0]
+				geneID2 = exonID2.split("|")[0]
+				liftedCoordinatesExonID1 = ":".join([line[0], line[1], line[2], line[5]])
+
+				if not geneID1 in exonPrediction_dict:
+					exonPrediction_dict[geneID1] = {}
+				if not exonID1 in exonPrediction_dict[geneID1]:
+					exonPrediction_dict[geneID1][exonID1] = {}
+
+				if not exonID2 in exonPrediction_dict[geneID1][exonID1]:
+					if exonID2 == ".":
+						outInfo = [sp1, gene_type[sp1][geneID1]["gene_type"], exonID1, sp2, ".", exonID2, liftedCoordinatesExonID1]
+					else:
+						outInfo = [sp1, gene_type[sp1][geneID1]["gene_type"], exonID1, sp2, gene_type[sp2][geneID2]["gene_type"], exonID2, liftedCoordinatesExonID1]
+					exonPrediction_dict[geneID1][exonID1][exonID2] = outInfo
 
 
 with open('counts/exon_coordinates.tsv', 'w') as outhandle:
-    for gene in exonOverlap_dict:
-        for exon1 in exonOverlap_dict[gene]:
-            for exon2 in exonOverlap_dict[gene][exon1]:
-                outhandle.write("\t".join(exonOverlap_dict[gene][exon1][exon2])+"\n")
+	header = ["sp1", "biotype_sp1", "exonID_sp1", "sp2", "biotype_sp2", "exonID_sp2", "liftedCoordinates_sp1_to_sp2"]
+	outhandle.write("\t".join(header)+"\n")
+	for gene in exonPrediction_dict:
+		for exon1 in exonPrediction_dict[gene]:
+			for exon2 in exonPrediction_dict[gene][exon1]:
+				outhandle.write("\t".join(exonPrediction_dict[gene][exon1][exon2])+"\n")
 
 
 
