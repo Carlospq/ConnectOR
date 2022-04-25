@@ -9,6 +9,7 @@ liftovers/
 maps/
 orthology/
 overlaps/
+plots/
 
 scripts/outputGenerator.py
 scripts/outputGenerator.zip
