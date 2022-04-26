@@ -1016,7 +1016,10 @@ if len(species) > 2:
 exonPrediction_dict = {}
 map_exon_gene = {}
 df =  pd.read_csv('counts/genes_stats_exon.csv', sep=',', na_filter=False)
-df_type = dict(zip(df['Gene ID'], df['Cluster type']))
+df['to sp2'] = df['Gene to hg38'] + df['Gene to danrer11']
+df_type =  df[['Gene ID', 'Cluster type', 'to sp2']]
+dict_type = df_type.set_index('Gene ID').to_dict()
+
 for sp1 in species:
 	# Get gene biotype
 	gene_type[sp1] = geneID_map_to_dict('maps/%s.geneID_map.txt'%(sp1))
@@ -1034,7 +1037,8 @@ for sp1 in species:
 				liftedCoordinatesExonID1 = ":".join([line[0], line[1], line[2], line[5]])
 				map_exon_gene[exonID1] = geneID1
 
-				cluster_type = df_type[map_exon_gene[exonID1]]
+				cluster_type = dict_type['Cluster type'][map_exon_gene[exonID1]]
+				toSP2 = dict_type['to sp2'][map_exon_gene[exonID1]]
 
 				if not geneID1 in exonPrediction_dict:
 					exonPrediction_dict[geneID1] = {}
@@ -1043,14 +1047,14 @@ for sp1 in species:
 
 				if not exonID2 in exonPrediction_dict[geneID1][exonID1]:
 					if exonID2 == ".":
-						outInfo = [sp1, gene_type[sp1][geneID1]["gene_type"], exonID1, cluster_type, sp2, ".", exonID2, liftedCoordinatesExonID1]
+						outInfo = [sp1, gene_type[sp1][geneID1]["gene_type"], exonID1, cluster_type, toSP2, sp2, ".", exonID2, liftedCoordinatesExonID1]
 					else:
-						outInfo = [sp1, gene_type[sp1][geneID1]["gene_type"], exonID1, cluster_type, sp2, gene_type[sp2][geneID2]["gene_type"], exonID2, liftedCoordinatesExonID1]
+						outInfo = [sp1, gene_type[sp1][geneID1]["gene_type"], exonID1, cluster_type, toSP2, sp2, gene_type[sp2][geneID2]["gene_type"], exonID2, liftedCoordinatesExonID1]
 					exonPrediction_dict[geneID1][exonID1][exonID2] = outInfo
 
 
 with open('counts/exons_liftedCoordinates.tsv', 'w') as outhandle:
-	header = ["sp1", "biotype_sp1", "exonID_sp1", "cluster_type", "sp2", "biotype_sp2", "exonID_sp2", "liftedCoordinates_sp1_to_sp2"]
+	header = ["sp1", "biotype_sp1", "exonID_sp1", "cluster_type", "gene to sp2", "sp2", "biotype_sp2", "exonID_sp2", "liftedCoordinates_sp1_to_sp2"]
 	outhandle.write("\t".join(header)+"\n")
 	for gene in exonPrediction_dict:
 		for exon1 in exonPrediction_dict[gene]:
