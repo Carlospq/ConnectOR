@@ -201,7 +201,6 @@ def generate_maps(arg_list):
 	print("\tMaps for %s... generated "%(sp))
 
 
-#def generate_beds(gtf, sp, gene_level):
 def generate_beds(arg_list):
 
 	gtf = arg_list[0]
@@ -214,34 +213,56 @@ def generate_beds(arg_list):
 		f = open(gtf, 'r')
 		compressed = False
 
+	# Check if exon BEDs are required
 	if not options.redo and os.path.isfile("./BEDs/{}.exons.bed".format(sp)):
 		print("\tBED for %s exons already exists.. Skipping"%(sp))
+		redo_exons = False
 	else:
-		print("\tBEDs for %s... generating"%(sp))
-		genes = {}
+		print("\tExons BEDs for %s... generating"%(sp))
 		output_exons = open("./BEDs/{}.exons.bed".format(sp),"w")
-		for line in f:
-			if compressed: line = str(line, 'utf-8')
-			if line.startswith("#"): continue
-			line = line.strip().split("\t")
+		redo_exons = True
 
-			if line[2] != "exon": continue
-			arguments = arguments_dic(line)
+	# Check if genes BEDs are required
+	if not options.redo and os.path.isfile("./BEDs/{}.genes.bed".format(sp)):
+		print("\tBED for %s genes already exists.. Skipping"%(sp))
+		redo_genes = False
+	else:
+		print("\tGenes BEDs for %s... generating"%(sp))
+		output_genes = open("./BEDs/{}.genes.bed".format(sp),"w")
+		redo_genes = True
 
-			if "gene_name" in arguments:
-				gene_name = arguments["gene_name"]
-			else:
-				gene_name = arguments["gene_id"]
+	# Skip function if outputs already exist
+	if not redo_exons and not redo_genes: return
 
-			gene_id = arguments["gene_id"]
-			chrom = line[0] if line[0].startswith("chr") else "chr"+line[0]
-			start = str(int(line[3])-1)
-			end = line[4]
-			strand = line[6]
+	# Read GTF and creat output BEDs
+	genes = {}
+	for line in f:
+		if compressed: line = str(line, 'utf-8')
+		if line.startswith("#"): continue
+		line = line.strip().split("\t")
 
-			coordiantes = ":".join([chrom, start, end, strand])
-			exon_id = "|".join([gene_id, gene_name, coordiantes])
+		if line[2] != "exon": continue
+		arguments = arguments_dic(line)
 
+		if "gene_name" in arguments:
+			gene_name = arguments["gene_name"]
+		else:
+			gene_name = arguments["gene_id"]
+
+		gene_id = arguments["gene_id"]
+		chrom = line[0] if line[0].startswith("chr") else "chr"+line[0]
+		start = str(int(line[3])-1)
+		end = line[4]
+		strand = line[6]
+
+		coordiantes = ":".join([chrom, start, end, strand])
+		exon_id = "|".join([gene_id, gene_name, coordiantes])
+
+		if redo_exons:
+			exon_bed_line = "\t".join([chrom, start, end, exon_id, '0', strand])+"\n"
+			output_exons.write(exon_bed_line)
+
+		if redo_genes:
 			if int(start) < 0: start = "0"
 			if not gene_id in genes:
 				genes[gene_id] = {"chrom": chrom,
@@ -255,30 +276,24 @@ def generate_beds(arg_list):
 				if int(end) > genes[gene_id]["end"]:
 					genes[gene_id]["end"] = int(end)
 
-			exon_bed_line = "\t".join([chrom, start, end, exon_id, '0', strand])+"\n"
-			output_exons.write(exon_bed_line)
-		output_exons.close()
+	#if gene_level:
+	if redo_genes:
+		for gene in genes:
+			d = genes[gene]
+			chrom = d["chrom"]
+			start = str(d["start"])
+			end = str(d["end"])
+			strand = d["strand"]
+			gene_name = d["gene_name"]
+
+			coordiantes = ":".join([chrom, start, end, strand])
+			gene_id = "|".join([gene, gene_name, coordiantes])
+
+			gene_bed_line = "\t".join([chrom, start, end, gene_id, '0', strand])+"\n"
+			output_genes.write(gene_bed_line)
+
+	if redo_exons or redo_genes:
 		print("\r\tBEDs for %s... generated "%(sp))
-
-	if gene_level:
-		if not options.redo and os.path.isfile("./BEDs/{}.genes.bed".format(sp)):
-			print("\tBED for %s genes already exists.. Skipping"%(sp))
-		else:
-			output_genes = open("./BEDs/{}.genes.bed".format(sp),"w")
-			for gene in genes:
-				d = genes[gene]
-				chrom = d["chrom"]
-				start = str(d["start"])
-				end = str(d["end"])
-				strand = d["strand"]
-				gene_name = d["gene_name"]
-
-				coordiantes = ":".join([chrom, start, end, strand])
-				gene_id = "|".join([gene, gene_name, coordiantes])
-
-				gene_bed_line = "\t".join([chrom, start, end, gene_id, '0', strand])+"\n"
-				output_genes.write(gene_bed_line)
-			output_genes.close()
 
 
 def bed_sort():
@@ -459,152 +474,149 @@ def plot_component(g, dictionary = {"hg38": "lightgreen", "mm10": "lightblue", "
 
 
 def get_clusters_stats(components, G, level, output_path="./counts/", species_names=False):
-    if species_names:
-        species = species_names
-    else:
-        species = sps.keys()
+	if species_names:
+		species = species_names
+	else:
+		species = sps.keys()
 
-    #Biotypes accepted for ncRNA clusters
-    ncrna_bt = ["NOVEL", "stringtie", "3prime_overlapping_ncRNA", "antisense", "bidirectional_promoter_lncRNA", "lincRNA", "ncRNA",
+	#Biotypes accepted for ncRNA clusters
+	ncrna_bt = ["NOVEL", "stringtie", "3prime_overlapping_ncRNA", "antisense", "bidirectional_promoter_lncRNA", "lincRNA", "ncRNA",
                 "non_coding", "processed_transcript", "sense_intronic", "sense_overlapping", "lncRNA", "snoRNA", "snRNA", "sRNA",
                 "misc_RNA", "rRNA", "scaRNA", "miRNA", "TEC", "scRNA", "macro_lncRNA",
                 "pseudogene", "transcribed_processed_pseudogene", "translated_processed_pseudogene", "polymorphic_pseudogene", "processed_pseudogene", "rRNA_pseudogene",
                 "transcribed_unitary_pseudogene", "transcribed_unprocessed_pseudogene", "unitary_pseudogene", "unprocessed_pseudogene", "translated_unprocessed_pseudogene"]
 
     #Check input/output names
-    if not path.exists(output_path):
-        os.makedirs(output_path)
+	if not path.exists(output_path):
+		os.makedirs(output_path)
 
-    if species_names:
-        o_name = "".join([species_names[0],"_", species_names[1], "_"])
-    else:
-        o_name = ""
+	if species_names:
+		o_name = "".join([species_names[0],"_", species_names[1], "_"])
+	else:
+		o_name = ""
 
-    output_cluster_stats = path.join(output_path, '%scluster_stats_%s.csv'%(o_name, level))
-    output_genes_stats   = path.join(output_path, '%sgenes_stats_%s.csv'%(o_name, level))
+	output_cluster_stats = path.join(output_path, '%scluster_stats_%s.csv'%(o_name, level))
+	output_genes_stats   = path.join(output_path, '%sgenes_stats_%s.csv'%(o_name, level))
 
-    org_all_count = list(species)
+	org_all_count = list(species)
 
-    #Total genes
-    total_genes = len(G.nodes())
+	#Total genes
+	total_genes = len(G.nodes())
 
-    #Map with full name of genes
-    map_fileNames = [f for f in os.listdir("maps")]
-    map_dictionary = {}
-    for fileName in map_fileNames:
-        df_maps = pd.read_csv("maps/"+fileName, sep='\t', na_filter= False, header=None, names=["geneID", "geneName", "biotype", "coordinates", "transcripts"])
-        df_maps["fullID"] = df_maps["geneID"]+";"+df_maps["geneName"]+";"+df_maps["biotype"]+";"+df_maps["coordinates"]
-        df_maps = df_maps[["geneID", "fullID"]].set_index('geneID').to_dict()["fullID"]
-        map_dictionary.update(df_maps)
+	#Map with full name of genes
+	map_fileNames = [f for f in os.listdir("maps")]
+	map_dictionary = {}
+	for fileName in map_fileNames:
+		df_maps = pd.read_csv("maps/"+fileName, sep='\t', na_filter= False, header=None, names=["geneID", "geneName", "biotype", "coordinates", "transcripts"])
+		df_maps["fullID"] = df_maps["geneID"]+";"+df_maps["geneName"]+";"+df_maps["biotype"]+";"+df_maps["coordinates"]
+		df_maps = df_maps[["geneID", "fullID"]].set_index('geneID').to_dict()["fullID"]
+		map_dictionary.update(df_maps)
 
-    #Liftover genes dictionary
-    liftovers = {level: {}}
-    liftovers_set = set()
-    liftover_fileNames = [f for f in os.listdir("liftovers") if "liftover" in f and level in f]
-    for fileName in liftover_fileNames:
+	#Liftover genes dictionary
+	liftovers = {level: {}}
+	liftovers_set = set()
+	liftover_fileNames = [f for f in os.listdir("liftovers") if "liftover" in f and level in f]
+	for fileName in liftover_fileNames:
 
-        name = fileName.split(".")
-        sp1 = name[0].split("to")[0]
-        sp2 = name[0].split("to")[1]
+		name = fileName.split(".")
+		sp1 = name[0].split("to")[0]
+		sp2 = name[0].split("to")[1]
 
-        if not sp1 in liftovers[level]:
-            liftovers[level][sp1] = {}
+		if not sp1 in liftovers[level]:
+			liftovers[level][sp1] = {}
 
-        df_liftovers = pd.read_csv("liftovers/"+fileName, sep='\t', na_filter= False, header=None, names=["chrom", "start", "end", "id", "score", "strand"])
-        df_liftovers['id'] = df_liftovers['id'].apply(lambda x:[y for y in x.split("|")])
-        df_set = set(df_liftovers['id'].apply(lambda x: x[0]))
+		df_liftovers = pd.read_csv("liftovers/"+fileName, sep='\t', na_filter= False, header=None, names=["chrom", "start", "end", "id", "score", "strand"])
+		df_liftovers['id'] = df_liftovers['id'].apply(lambda x:[y for y in x.split("|")])
+		df_set = set(df_liftovers['id'].apply(lambda x: x[0]))
 
-        liftovers_set.update(df_set)
-        liftovers[level][sp1][sp2] = df_set
+		liftovers_set.update(df_set)
+		liftovers[level][sp1][sp2] = df_set
 
+	#Headers for output files
+	header_stats = ['Cluster ID','Nodes','Number of species', 'Bidirectionality', 'Cluster type', 'Biotypes']
+	header_genes = ['Gene ID','Species', 'Biotype', 'Cluster ID', 'Cluster Biotype', 'Cluster type', 'Orthologues', 'in_degree','out_degree']
 
-    #Headers for output files
-    header_stats = ['Cluster ID','Nodes','Number of species', 'Bidirectionality', 'Cluster type', 'Biotypes']
-    header_genes = ['Gene ID','Species', 'Biotype', 'Cluster ID', 'Cluster Biotype', 'Cluster type', 'Orthologues', 'in_degree','out_degree']
+	for sp in species:
+		header_stats += ['has_'+sp, 'count_'+sp, 'Gene IDs '+sp]
+		header_genes.insert(6, 'Gene to '+sp)
 
-    for sp in species:
-        header_stats += ['has_'+sp, 'count_'+sp, 'Gene IDs '+sp]
-        header_genes.insert(6, 'Gene to '+sp)
+	o1 = open(output_cluster_stats,'w')
+	o1.write(','.join(header_stats)+'\n')
+	o2 = open(output_genes_stats,'w')
+	o2.write(','.join(header_genes)+'\n')
 
-    o1 = open(output_cluster_stats,'w')
-    o1.write(','.join(header_stats)+'\n')
-    o2 = open(output_genes_stats,'w')
-    o2.write(','.join(header_genes)+'\n')
+	#Iterate over clusters
+	for idx,c in enumerate(components):
+		g = G.subgraph(c)
+		nodes = g.nodes()
+		edges = g.edges()
+		edges_set = set(edges)
+		print("\r%.2f%s Cluster %s of %s (%s genes in cluster)"%(int(idx)/len(components)*100, "%", str(idx), str(len(components)), str(len(g.nodes()))) , end= "\r", file=sys.stderr)
 
-    #Iterate over clusters
-    for idx,c in enumerate(components):
-        g = G.subgraph(c)
-        nodes = g.nodes()
-        edges = g.edges()
-        edges_set = set(edges)
-        print("\r%.2f%s Cluster %s of %s (%s genes in cluster)"%(int(idx)/len(components)*100, "%", str(idx), str(len(components)), str(len(g.nodes()))) , end= "\r", file=sys.stderr)
+		#Bidirectionality in the cluster
+		is_bidirectional = [1 if (v[1],v[0]) in edges_set else 0 for v in edges]
+		bidirectional = 0 if len(edges) == 0 else sum(is_bidirectional)/len(edges)
 
-        #Bidirectionality in the cluster
-        is_bidirectional = [1 if (v[1],v[0]) in edges_set else 0 for v in edges]
-        bidirectional = 0 if len(edges) == 0 else sum(is_bidirectional)/len(edges)
+		#Biotypes in cluster
+		biotypes = set([n[2] for n in nodes])
+		if len(biotypes) == 1:
+			cluster_biotype = biotypes.pop()
+		else:
+			cluster_biotype = "other"
 
-        #Biotypes in cluster
-        biotypes = set([n[2] for n in nodes])
-        if len(biotypes) == 1:
-            cluster_biotype = biotypes.pop()
-        else:
-            cluster_biotype = "other"
+		#Nodes per species in cluster
+		org_comp_count_ugly = Counter([x[0] for x in nodes])
+		org_comp_count = {k:v for k,v in org_comp_count_ugly.items()}
+		for sp in species:
+			if sp not in org_comp_count:
+				org_comp_count[sp] = 0
+		n_species = sum([1 for sp in org_comp_count if org_comp_count[sp] > 0])
 
-        #Nodes per species in cluster
-        org_comp_count_ugly = Counter([x[0] for x in nodes])
-        org_comp_count = {k:v for k,v in org_comp_count_ugly.items()}
-        for sp in species:
-            if sp not in org_comp_count:
-                org_comp_count[sp] = 0
-        n_species = sum([1 for sp in org_comp_count if org_comp_count[sp] > 0])
-
-        #Cluster data
-        data = {'Cluster ID': str(idx),
+		#Cluster data
+		data = {'Cluster ID': str(idx),
                 'Nodes': str(len(nodes)),
                 'Number of species': str(n_species),
                 'Bidirectionality': '%.2f'%(bidirectional),
                 'Biotypes': cluster_biotype}
 
-        for sp in species:
-            data['has_'+sp] = str(int(org_comp_count[sp]>0))
-            data['count_'+sp] = str(org_comp_count[sp])
-            data['per_cluster_'+sp] = '%.2f'%(100*org_comp_count[sp]/len(nodes))
-            data['per_total_'+sp] = '%.2f'%(100*org_comp_count[sp]/total_genes)
-            data['Gene IDs '+sp] = "|".join([map_dictionary[n[1]] for n in nodes if n[0]==sp])
+		for sp in species:
+			data['has_'+sp] = str(int(org_comp_count[sp]>0))
+			data['count_'+sp] = str(org_comp_count[sp])
+			data['per_cluster_'+sp] = '%.2f'%(100*org_comp_count[sp]/len(nodes))
+			data['per_total_'+sp] = '%.2f'%(100*org_comp_count[sp]/total_genes)
+			data['Gene IDs '+sp] = "|".join([map_dictionary[n[1]] for n in nodes if n[0]==sp])
 
-        #Cluster type
-        cluster_type=''
-        has_list = [int(data[x]) for x in data if x.startswith("has")]
-        count_list = [int(data[x]) for x in data if x.startswith("count")]
+		#Cluster type
+		cluster_type=''
+		has_list = [int(data[x]) for x in data if x.startswith("has")]
+		count_list = [int(data[x]) for x in data if x.startswith("count")]
 
-        if len(nodes) == 1:
-            cluster_type = 'One to none' if list(nodes)[0][1] in liftovers_set else "Not lifted"
+		if len(nodes) == 1:
+			cluster_type = 'One to none' if list(nodes)[0][1] in liftovers_set else "Not lifted"
 
-        if len(nodes) == sum(has_list) and len(nodes) > 1:
-            cluster_type = 'One to one' if bidirectional == 1 else "One to half"
+		if len(nodes) == sum(has_list) and len(nodes) > 1:
+			cluster_type = 'One to one' if bidirectional == 1 else "One to half"
 
-        if len(nodes) > sum(has_list):
-            cluster_type = 'One to many' if 1 in count_list else "Many to many"
+		if len(nodes) > sum(has_list):
+			cluster_type = 'One to many' if 1 in count_list else "Many to many"
 
-        data['Cluster type'] = cluster_type
-        o1.write(','.join(data[x] for x in header_stats)+'\n')
+		data['Cluster type'] = cluster_type
+		o1.write(','.join(data[x] for x in header_stats)+'\n')
 
+		#Write info for each node (gene) to output file 2
+		for node in nodes:
+			in_edges  = set(g.in_edges(node))
+			out_edges = set(g.out_edges(node))
 
-        #Write info for each node (gene) to output file 2
-        for node in nodes:
+			suc = set(g.successors(node))
+			pre = set(g.predecessors(node))
 
-            in_edges  = set(g.in_edges(node))
-            out_edges = set(g.out_edges(node))
+			union = suc.union(pre)
+			inter = suc.intersection(pre)
 
-            suc = set(g.successors(node))
-            pre = set(g.predecessors(node))
-
-            union = suc.union(pre)
-            inter = suc.intersection(pre)
-
-            predictions = "|".join([map_dictionary[n[1]] for n in union])
-            node_biotype = node[2]
-            data2 = {'Gene ID': node[1],
+			predictions = "|".join([map_dictionary[n[1]] for n in union])
+			node_biotype = node[2]
+			data2 = {'Gene ID': node[1],
                      'Species': node[0],
                      'Biotype': node_biotype,
                      'Cluster ID': str(idx),
@@ -615,27 +627,27 @@ def get_clusters_stats(components, G, level, output_path="./counts/", species_na
                      'in_degree': str(g.in_degree(node)),
                      'out_degree': str(g.out_degree(node))}
 
-            #Get connections in cluster only for sp1 and sp2
-            for sp1 in species:
-                if not sp1 == node[0]: continue
-                for sp2 in species:
-                    if sp1 == sp2: continue
-                    if sp2 == node[0]:
-                        data2["Gene to "+sp2] = ""
-                        continue
-                    if sp2 in [n[0] for n in suc]:
-                        data2["Gene to "+sp2] = "Predicted"
-                    elif node[1] in liftovers[level][sp1][sp2]:
-                        data2["Gene to "+sp2] = "Lifted"
-                    else:
-                        data2["Gene to "+sp2] = "Not lifted"
+			#Get connections in cluster only for sp1 and sp2
+			for sp1 in species:
+				if not sp1 == node[0]: continue
+				for sp2 in species:
+					if sp1 == sp2: continue
+					if sp2 == node[0]:
+						data2["Gene to "+sp2] = ""
+						continue
+					if sp2 in [n[0] for n in suc]:
+						data2["Gene to "+sp2] = "Predicted"
+					elif node[1] in liftovers[level][sp1][sp2]:
+						data2["Gene to "+sp2] = "Lifted"
+					else:
+						data2["Gene to "+sp2] = "Not lifted"
 
-            o2.write(','.join(data2[x] for x in header_genes)+'\n')
+			o2.write(','.join(data2[x] for x in header_genes)+'\n')
 
-    o1.close()
-    print('Wrote',output_cluster_stats, ' '*20, file=sys.stderr)
-    o2.close()
-    print('Wrote',output_genes_stats, ' '*20, file=sys.stderr)
+	o1.close()
+	print('Wrote',output_cluster_stats, ' '*20, file=sys.stderr)
+	o2.close()
+	print('Wrote',output_genes_stats, ' '*20, file=sys.stderr)
 
 
 ### Read and check config file
@@ -731,8 +743,30 @@ for i in config_df.index:
 			if f == "genes" and not gene_level: continue
 			sp1=config_df.loc[i]["assembly_version"].lower()
 			sp2=config_df.loc[j]["assembly_version"].lower()
-			output = 'overlaps/%sto%s.%s.overlap'%(sp1, sp2, f)
 
+			# Overlap exons_span with gene_span
+			if os.path.isfile('overlaps/%sto%s.%s.overlap'%(sp1, sp2, 'gene')):
+				pass
+			else:
+				output_exon = 'overlaps/%sto%s.%s.overlap'%(sp1, sp2, 'exon')
+				output_exonStrand = 'overlaps/%sto%s.%s.overlap'%(sp1, sp2, 'exonStrand')
+				output_gene = 'overlaps/%sto%s.%s.overlap'%(sp1, sp2, 'gene')
+				output_geneStrand = 'overlaps/%sto%s.%s.overlap'%(sp1, sp2, 'geneStrand')
+
+				lifover_input = 'liftovers/%sto%s.%s.liftover'%(sp1, sp2, 'exons')
+				bed_exonsInput = 'BEDs/%s.%s.bed'%(sp2, 'exons')
+				bed_genesInput = 'BEDs/%s.%s.bed'%(sp2, 'genes')
+
+				call_exon = 'intersectBed -wao -a %s -b %s > %s'%(lifover_input, bed_exonsInput, output_exon)
+				call_exonStrand = 'intersectBed -wao -s -a %s -b %s > %s'%(lifover_input, bed_exonsInput, output_exonStrand)
+				call_gene = 'intersectBed -wao -a %s -b %s > %s'%(lifover_input, bed_genesInput, output_gene)
+				call_geneStrand = 'intersectBed -wao -s -a %s -b %s > %s'%(lifover_input, bed_genesInput, output_geneStrand)
+
+				for c in [call_exon, call_exonStrand, call_gene, call_geneStrand]:
+					subprocess.call(c, shell=True, executable='/bin/bash')
+
+			# Overlap exons with exons and genes with genes
+			output = 'overlaps/%sto%s.%s.overlap'%(sp1, sp2, f)
 			if not options.redo and os.path.isfile(output):
 				print("\t{} {} to {} already exist.. Skipping".format(i, f, j))
 			else:
@@ -938,7 +972,7 @@ for file in orthology_files:
     ALL_GENES = sorted(set(ALL_GENES))
 
     #Read pd's with classification
-    df = pd.read_csv("./orthology/%s"%(file), sep="\t", header=1,
+    df = pd.read_csv("./orthology/%s"%(file), sep="\t", header=0,
                      names = ["GeneA_ID", "GeneA_biotype", "GeneB_IDs", "GeneB_biotypes", "GeneB_Classification", "GeneA_number_overlapping_exons", "GeneA_percent_overlapping"])
     df = df[['GeneA_ID','GeneA_biotype', 'GeneB_IDs']]
 
@@ -1012,7 +1046,8 @@ if len(species) > 2:
                 get_clusters_stats(components_gene, G_gene, "gene", species_names=[sp1, sp2])
 
 
-### Predictions to list format with specific exonic coordinates predictions
+### Output for exons: every lifted exon is outputed outputted with its lifted coordinates and orthology prediction if any
+# Added intergenic/intronic overlap information
 exonPrediction_dict = {}
 map_exon_gene = {}
 df =  pd.read_csv('counts/genes_stats_exon.csv', sep=',', na_filter=False)
@@ -1020,11 +1055,47 @@ df['to sp2'] = df['Gene to hg38'] + df['Gene to danrer11']
 df_type =  df[['Gene ID', 'Cluster type', 'to sp2']]
 dict_type = df_type.set_index('Gene ID').to_dict()
 
+
+def get_overlappingType_dict(sp1, sp2):
+	files = [x for x in os.listdir('overlaps') if x.startswith('%sto%s'%(sp1, sp2))]
+	overlapType = {}
+	for f in files:
+		fType = f.split(".")[1]
+		if fType == "exons" or fType == "genes": continue
+		with open('overlaps/%s'%(f)) as handle:
+			for line in handle:
+				line = line.strip().split("\t")
+				exon_id = line[3]
+				if not exon_id in overlapType:
+					overlapType[exon_id] = {}
+				overlapType[exon_id][fType] = [False if line[6] == '.' else True][0]
+	return overlapType
+
+
+def get_overlappingType(overlaps):
+	if overlaps["exonStrand"]:
+		overlapType = 'exonic_sameStrand'
+	elif overlaps["exon"]:
+		overlapType = 'exonic_differentStrand'
+	elif overlaps["geneStrand"]:
+		overlapType = 'intronic_sameStrand'
+	elif overlaps["gene"]:
+		overlapType = 'intronic_differentStrand'
+	else:
+		overlapType = 'intergenic'
+	return overlapType
+
+
 for sp1 in species:
 	# Get gene biotype
 	gene_type[sp1] = geneID_map_to_dict('maps/%s.geneID_map.txt'%(sp1))
 	for sp2 in species:
 		if sp1 == sp2: continue
+
+		# Obtein intergenic / genic overlaps
+		overlapTypeDict =  get_overlappingType_dict(sp1, sp2)
+
+
 		gene_type[sp2] = geneID_map_to_dict('maps/%s.geneID_map.txt'%(sp2))
 		with open("".join(["overlaps/", sp1, "to", sp2, ".exons.overlap"]), 'r') as handle:
 			for line in handle:
@@ -1039,6 +1110,7 @@ for sp1 in species:
 
 				cluster_type = dict_type['Cluster type'][map_exon_gene[exonID1]]
 				toSP2 = dict_type['to sp2'][map_exon_gene[exonID1]]
+				overlapType = get_overlappingType(overlapTypeDict[exonID1])
 
 				if not geneID1 in exonPrediction_dict:
 					exonPrediction_dict[geneID1] = {}
@@ -1047,14 +1119,14 @@ for sp1 in species:
 
 				if not exonID2 in exonPrediction_dict[geneID1][exonID1]:
 					if exonID2 == ".":
-						outInfo = [sp1, gene_type[sp1][geneID1]["gene_type"], exonID1, cluster_type, toSP2, sp2, ".", exonID2, liftedCoordinatesExonID1]
+						outInfo = [sp1, gene_type[sp1][geneID1]["gene_type"], exonID1, cluster_type, toSP2, overlapType, sp2, ".", exonID2, liftedCoordinatesExonID1]
 					else:
-						outInfo = [sp1, gene_type[sp1][geneID1]["gene_type"], exonID1, cluster_type, toSP2, sp2, gene_type[sp2][geneID2]["gene_type"], exonID2, liftedCoordinatesExonID1]
+						outInfo = [sp1, gene_type[sp1][geneID1]["gene_type"], exonID1, cluster_type, toSP2, overlapType, sp2, gene_type[sp2][geneID2]["gene_type"], exonID2, liftedCoordinatesExonID1]
 					exonPrediction_dict[geneID1][exonID1][exonID2] = outInfo
 
 
 with open('counts/exons_liftedCoordinates.tsv', 'w') as outhandle:
-	header = ["sp1", "biotype_sp1", "exonID_sp1", "cluster_type", "gene to sp2", "sp2", "biotype_sp2", "exonID_sp2", "liftedCoordinates_sp1_to_sp2"]
+	header = ["sp1", "biotype_sp1", "exonID_sp1", "gene_cluster_type", "gene to sp2", "exon_overlapping_type", "sp2", "biotype_sp2", "exonID_sp2", "liftedCoordinates_sp1_to_sp2"]
 	outhandle.write("\t".join(header)+"\n")
 	for gene in exonPrediction_dict:
 		for exon1 in exonPrediction_dict[gene]:
