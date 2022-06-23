@@ -1048,14 +1048,6 @@ if len(species) > 2:
 
 ### Output for exons: every lifted exon is outputed outputted with its lifted coordinates and orthology prediction if any
 # Added intergenic/intronic overlap information
-exonPrediction_dict = {}
-map_exon_gene = {}
-df =  pd.read_csv('counts/genes_stats_exon.csv', sep=',', na_filter=False)
-df['to sp2'] = df['Gene to hg38'] + df['Gene to danrer11']
-df_type =  df[['Gene ID', 'Cluster type', 'to sp2']]
-dict_type = df_type.set_index('Gene ID').to_dict()
-
-
 def get_overlappingType_dict(sp1, sp2):
 	files = [x for x in os.listdir('overlaps') if x.startswith('%sto%s'%(sp1, sp2))]
 	overlapType = {}
@@ -1085,16 +1077,23 @@ def get_overlappingType(overlaps):
 		overlapType = 'intergenic'
 	return overlapType
 
-
+handle_all = open('counts/exons_liftedCoordinates_all.tsv', 'w')
 for sp1 in species:
 	# Get gene biotype
 	gene_type[sp1] = geneID_map_to_dict('maps/%s.geneID_map.txt'%(sp1))
 	for sp2 in species:
 		if sp1 == sp2: continue
 
+		exonPrediction_dict = {}
+		map_exon_gene = {}
+
+		df =  pd.read_csv('counts/genes_stats_exon.csv', sep=',', na_filter=False)
+		df['to sp2'] = df['Gene to '+sp1] + df['Gene to '+sp2]
+		df_type =  df[['Gene ID', 'Cluster type', 'to sp2']]
+		dict_type = df_type.set_index('Gene ID').to_dict()
+
 		# Obtein intergenic / genic overlaps
 		overlapTypeDict =  get_overlappingType_dict(sp1, sp2)
-
 
 		gene_type[sp2] = geneID_map_to_dict('maps/%s.geneID_map.txt'%(sp2))
 		with open("".join(["overlaps/", sp1, "to", sp2, ".exons.overlap"]), 'r') as handle:
@@ -1125,14 +1124,14 @@ for sp1 in species:
 					exonPrediction_dict[geneID1][exonID1][exonID2] = outInfo
 
 
-with open('counts/exons_liftedCoordinates.tsv', 'w') as outhandle:
-	header = ["sp1", "biotype_sp1", "exonID_sp1", "gene_cluster_type", "gene to sp2", "exon_overlapping_type", "sp2", "biotype_sp2", "exonID_sp2", "liftedCoordinates_sp1_to_sp2"]
-	outhandle.write("\t".join(header)+"\n")
-	for gene in exonPrediction_dict:
-		for exon1 in exonPrediction_dict[gene]:
-			for exon2 in exonPrediction_dict[gene][exon1]:
-				outhandle.write("\t".join(exonPrediction_dict[gene][exon1][exon2])+"\n")
-
+		with open('counts/exons_liftedCoordinates_'+sp1+'_to_'+sp2+'.tsv', 'w') as outhandle:
+			header = ["sp1", "biotype_sp1", "exonID_sp1", "gene_cluster_type", "gene to sp2", "exon_overlapping_type", "sp2", "biotype_sp2", "exonID_sp2", "liftedCoordinates_sp1_to_sp2"]
+			outhandle.write("\t".join(header)+"\n")
+			for gene in exonPrediction_dict:
+				for exon1 in exonPrediction_dict[gene]:
+					for exon2 in exonPrediction_dict[gene][exon1]:
+						outhandle.write("\t".join(exonPrediction_dict[gene][exon1][exon2])+"\n")
+						handle_all.write("\t".join(exonPrediction_dict[gene][exon1][exon2])+"\n")
 
 
 ### Plotting results

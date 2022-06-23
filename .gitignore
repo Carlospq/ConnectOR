@@ -14,6 +14,7 @@ plots/
 
 scripts/outputGenerator.py
 scripts/outputGenerator.zip
+ConnectOR.zip
 
 Danio_rerio.GRCz11.105.chr.gtf*
 gencode.v39.annotation.gtf*
