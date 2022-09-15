@@ -48,18 +48,20 @@ read_df <- function(df_type, sp1=FALSE, sp2=FALSE, gl=gene_level){
   df <- df[df$Species!="",]
   df <- df[df$Biotype!="",]
   df <- df[df$Cluster.type!="",]
-  
-  levels(df$Cluster.type) <- c("Not lifted", "One to none", "Many to many", "One to many", "One to half", "One to one")
-  for (ct in c("Not lifted", "One to none", "Many to many", "One to many", "One to half", "One to one")){
-    if ( !(ct %in% df$Cluster.type) ) {
-      for (sp in levels(df$Species)) {
-        for (bt in levels(df$Biotype)) {
-          for (l in levels(df$Level)) {
-            df <- rbind(df, c(sp, bt, ct, l, 0))   
+
+  for ( ct in c("Not lifted", "One to none", "Many to many", "One to many", "One to half", "One to one") ){
+    if ( !(ct %in% levels(df$Cluster.type)) ) {
+      levels(df$Cluster.type) <- c(levels(df$Cluster.type), ct)
+    }
+    for (sp in levels(df$Species)) {
+      for (bt in levels(df$Biotype)) {
+        for (l in levels(df$Level)) {
+          if ( !(ct %in% df[df$Species==sp & df$Biotype==bt & df$Level==l, "Cluster.type"]  ) ) {
+            df <- rbind(df, c(sp, bt, ct, l, 0))     
           }
         }
       }
-    }  
+    }
   }
   df$Freq <- as.numeric(df$Freq)
   
