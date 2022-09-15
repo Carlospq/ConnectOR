@@ -48,18 +48,29 @@ read_df <- function(df_type, sp1=FALSE, sp2=FALSE, gl=gene_level){
   df <- df[df$Species!="",]
   df <- df[df$Biotype!="",]
   df <- df[df$Cluster.type!="",]
-
+  
+  levels(df$Cluster.type) <- c("Not lifted", "One to none", "Many to many", "One to many", "One to half", "One to one")
+  for (ct in c("Not lifted", "One to none", "Many to many", "One to many", "One to half", "One to one")){
+    if ( !(ct %in% df$Cluster.type) ) {
+      for (sp in levels(df$Species)) {
+        for (bt in levels(df$Biotype)) {
+          for (l in levels(df$Level)) {
+            df <- rbind(df, c(sp, bt, ct, l, 0))   
+          }
+        }
+      }
+    }  
+  }
+  df$Freq <- as.numeric(df$Freq)
+  
   df$Cluster.type <- factor(df$Cluster.type, levels = c("Not lifted", "One to none", "Many to many", "One to many", "One to half", "One to one"))
   df <- df %>%
-    group_by(Level, Species, Biotype, Cluster.type) %>%
-    summarise(Count = sum(Freq)) %>%
-    mutate( Ratio = Count / sum(Count),
-            pos = (cumsum(Ratio) - 0.5 * Ratio))
-           #, label = percent(Ratio %>% round(2)))
+        group_by(Level, Species, Biotype, Cluster.type) %>%
+        summarise(Count = sum(Freq)) %>%
+        mutate( Ratio = Count / sum(Count),
+                pos = (cumsum(Ratio) - 0.5 * Ratio))
   df$Cluster.type <- factor(df$Cluster.type, levels = c("One to one", "One to half", "One to many", "Many to many", "One to none", "Not lifted"))
-  #df[df$Count==0, "Count"] <- ""
-  df <- df[df$Count!=0, ]
-  
+
   return(df)
 }
 prepare_ticks_df <- function(df){
@@ -68,7 +79,6 @@ prepare_ticks_df <- function(df){
     mutate( ticks = 1, #round(1-(sum(Ratio)), 1),
             ticks_label = round(sum(Ratio)*100,1))
   ticks_df <- unique(ticks_df[,-4])
-  #ticks_df$ticks <- round(ticks_df$ticks, 0)
   ticks_df$ticks_label <- format(as.double(ticks_df$ticks_label), nsmall = 1)
   ticks_df[ticks_df == " 0.0"] <- ""
   ticks_df[ticks_df == " NaN"] <- ""
@@ -93,12 +103,12 @@ p <- ggplot(genes_stats_df, aes(x=Species, y=Ratio, label=Count, fill=Cluster.ty
             labs(y="Percent genes", x="Reference annotations") +
             # Scale & Colors
             scale_y_continuous(labels = insert_minor(seq(0,100,25),4), breaks = seq(0,1,length.out = 21)) +
-            #scale_fill_brewer("Orthology", palette = "BuGn") +
-            scale_fill_manual(values = c("#238B45", "#74C476", "#BAE4B3", "#EDF8E9", "Grey", "Darkgrey")) +
+            scale_fill_manual(values = c("#238B45", "#74C476", "#BAE4B3", "#EDF8E9", "Grey", "Darkgrey"),
+                              labels = levels(genes_stats_df$Cluster.type)) +
             # Facets (splitting the plot)
             facet_grid(Biotype~Level, scales = "free", space='free_x') +
             # Labels (Total number of genes per category)
-            geom_label_repel(aes(x=Species, y=Ratio, label=Count, group=Biotype), 
+            geom_label_repel(data = genes_stats_df[genes_stats_df$Count!=0, ], aes(x=Species, y=Ratio, label=Count, group=Biotype), 
                              position = position_stack(vjust = .5),
                              show.legend = FALSE) +
             # Labels for total percent of genes with predicted orthology
