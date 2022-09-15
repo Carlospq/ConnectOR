@@ -239,10 +239,10 @@ def generate_beds(arg_list):
 			end = line[4]
 			strand = line[6]
 
+			if int(start) < 0: start = "0"
 			coordiantes = ":".join([chrom, start, end, strand])
 			exon_id = "|".join([gene_id, gene_name, coordiantes])
-
-			if int(start) < 0: start = "0"
+			
 			if not gene_id in genes:
 				genes[gene_id] = {"chrom": chrom,
 								  "start": int(start),
