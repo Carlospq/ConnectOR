@@ -1,4 +1,9 @@
 # ConnectOR (v2.0 - 28/07/2021)
+
+### Authors:
+- Carlos Pulido (cpulidoq@unil.ch)
+- Daniel Kużnicki (dkuznicki@ibch.poznan.pl)
+
 Multiple Species Orthology Finder
 
 ![Image not available](https://raw.githubusercontent.com/Carlospq/ConnectOR/master/raw/ConnectOR.png "ConnectOR summary")
